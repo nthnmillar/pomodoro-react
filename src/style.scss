@@ -3,52 +3,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,423;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,423;1,500;1,600;1,700&display=swap');
 
 
-$body-bg:#1e1e1e;
+$body-bg:yellow;
 $header-text:'Roboto', sans-serif;
 $font-text: 'Roboto Mono', monospace;
 $h2-color:#b07a60;
 $h1-color:#5c9ac9;
 $font-color:#8fbbc4;
 
-body,textarea,pre code{
+body{
  font-family: $font-text;
  background-color: $body-bg;
  color: $font-color;
-}
-
-#mark-title, #mark-subtitle{
- font-family: $header-text;
- font-weight: 400;
- letter-spacing: 4px;
-}
-
-
-h1,h2,h3,h4,h5{
- font-weight: 300;
-}
-
-#mark-title{
- margin-top:20px;
- color: $h1-color;
-}
-
-#mark-subtitle{
- color: $h2-color;
- margin-top: 20px;
- margin-bottom: 20px;
-}
-
-img{
- margin: 20px;
-}
-
-#editor{
- display:block;
- padding:10px;
- margin-bottom:15px;
- resize:vertical;
- overflow:auto;
- width:100%;
- height: 500px;
- margin:0 auto;
 }

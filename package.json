@@ -1,6 +1,6 @@
 {
-  "homepage": "http://nthnmillar.github.io/markdown-react",
-  "name": "markdown-react",
+  "homepage": "http://nthnmillar.github.io/drum-machine-react",
+  "name": "drum-machine-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,7 +14,8 @@
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "yarn": "^1.22.4"
   },
   "scripts": {
     "predeploy": "npm run build",
