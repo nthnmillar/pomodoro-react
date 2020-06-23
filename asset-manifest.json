@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/markdown-react/static/css/main.72060124.chunk.css",
-    "main.js": "/markdown-react/static/js/main.8aac0e49.chunk.js",
-    "main.js.map": "/markdown-react/static/js/main.8aac0e49.chunk.js.map",
-    "runtime-main.js": "/markdown-react/static/js/runtime-main.62f4edd8.js",
-    "runtime-main.js.map": "/markdown-react/static/js/runtime-main.62f4edd8.js.map",
-    "static/js/2.5761966f.chunk.js": "/markdown-react/static/js/2.5761966f.chunk.js",
-    "static/js/2.5761966f.chunk.js.map": "/markdown-react/static/js/2.5761966f.chunk.js.map",
-    "index.html": "/markdown-react/index.html",
-    "precache-manifest.fddb351f0be0d36eec26074b149b8c75.js": "/markdown-react/precache-manifest.fddb351f0be0d36eec26074b149b8c75.js",
-    "service-worker.js": "/markdown-react/service-worker.js",
-    "static/css/main.72060124.chunk.css.map": "/markdown-react/static/css/main.72060124.chunk.css.map",
-    "static/js/2.5761966f.chunk.js.LICENSE.txt": "/markdown-react/static/js/2.5761966f.chunk.js.LICENSE.txt"
+    "main.css": "/drum-machine-react/static/css/main.6a68a6a4.chunk.css",
+    "main.js": "/drum-machine-react/static/js/main.d9e15135.chunk.js",
+    "main.js.map": "/drum-machine-react/static/js/main.d9e15135.chunk.js.map",
+    "runtime-main.js": "/drum-machine-react/static/js/runtime-main.47ded410.js",
+    "runtime-main.js.map": "/drum-machine-react/static/js/runtime-main.47ded410.js.map",
+    "static/js/2.9524f560.chunk.js": "/drum-machine-react/static/js/2.9524f560.chunk.js",
+    "static/js/2.9524f560.chunk.js.map": "/drum-machine-react/static/js/2.9524f560.chunk.js.map",
+    "index.html": "/drum-machine-react/index.html",
+    "precache-manifest.4e1292f266e5f401fceb4a717c925070.js": "/drum-machine-react/precache-manifest.4e1292f266e5f401fceb4a717c925070.js",
+    "service-worker.js": "/drum-machine-react/service-worker.js",
+    "static/css/main.6a68a6a4.chunk.css.map": "/drum-machine-react/static/css/main.6a68a6a4.chunk.css.map",
+    "static/js/2.9524f560.chunk.js.LICENSE.txt": "/drum-machine-react/static/js/2.9524f560.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.62f4edd8.js",
-    "static/js/2.5761966f.chunk.js",
-    "static/css/main.72060124.chunk.css",
-    "static/js/main.8aac0e49.chunk.js"
+    "static/js/runtime-main.47ded410.js",
+    "static/js/2.9524f560.chunk.js",
+    "static/css/main.6a68a6a4.chunk.css",
+    "static/js/main.d9e15135.chunk.js"
   ]
 }
