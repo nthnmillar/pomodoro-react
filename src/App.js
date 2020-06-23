@@ -10,24 +10,22 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      input: ''
+      input: '# Marked in browser\n\nRendered by **marked**.'
     };
-    /* this.stringToHTML = this.stringToHTML.bind(this) */
+    this.handleChange = this.handleChange.bind(this)
   }
 
+  /*
   componentDidMount(){
     this.setState(
       {input:'# Marked in browser\n\nRendered by **marked**.'}
       )   
   }
+  */
 
-/* 
-  const stringToHTML = function (str){
-    let dom = document.createElement('div');
-    dom.innerHTML = str;
-    return dom;
+  handleChange(event){
+    this.setState({input : event.target.value})    
   }
-*/
 
   render(){
   return (
@@ -36,7 +34,7 @@ class App extends React.Component {
           <div className="row">
             <div className="col-sm-6">
               <h2>Markdown</h2>
-              <textarea id="editor">{this.state.input}</textarea> 
+              <textarea onChange={this.handleChange} id="editor">{this.state.input}</textarea> 
             </div>
             <div className="col-sm-6">
               <h2>Preview</h2>
