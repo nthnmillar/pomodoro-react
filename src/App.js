@@ -1,27 +1,30 @@
-import React, {useState} from 'react';
-/*import AudioPlayer from "./AudioPlayer"; */
+import React from 'react';
+import D2 from './audio/909-HiHatClosed-D2.wav';
 import 'bootstrap'; 
 
-/*
-const [drumSound,setSound] = useState(0);
-const [btnName,setBtn] = useState(0);
-*/
-
-/*
-function SoundPlay(props){ 
-  switch(props.drumSound){
-    case props.drumSound ==
-
-  }
+function DrumSound(noise){
+    console.log("audio", noise);
+    let audio = new Audio(noise);
+    audio.play();
 }
-*/
 
+function SoundPlay(name){ 
+    console.log("SoundPlay","soundName", name);
+    switch(name){
+      case "Q":
+        DrumSound(D2);
+      default:
+        return 
+      }
+}
+    
 function DrumButton(props){
-  return (
-    <div className="drum-pad col">
-      <p className="text-center">{props.btnName}</p>
-    </div>
-  )
+    console.log("DrumButton", props.btnName);
+    return (
+      <div className="drum-pad col" onClick={() => {SoundPlay(props.btnName)}}>
+        <p className="text-center">{props.btnName}</p>
+      </div>
+    )
 }
 
 function App(){
@@ -45,10 +48,22 @@ function App(){
             <DrumButton btnName="C"/>                                  
           </div>     
       </div>     
-    );
-};
+    )
+}
 
 export default App;
+
+// import React, {useState} from 'react';
+/*import AudioPlayer from "./AudioPlayer"; */
+
+/*
+const [drumSound,setSound] = useState(0);
+const [btnName,setBtn] = useState(0);
+*/
+ 
+
+//   
+// <SoundPlay drumSound={props.btnName}/>
 
  /*
   const audioPlayer = AudioPlayer();
