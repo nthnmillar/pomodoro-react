@@ -9,12 +9,12 @@
     "@testing-library/user-event": "^7.1.2",
     "bootstrap": "^4.5.0",
     "jquery": "^3.5.1",
-    "marked": "^1.1.0",
     "node-sass": "^4.14.1",
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "soundfont-player": "^0.12.0",
     "yarn": "^1.22.4"
   },
   "scripts": {
