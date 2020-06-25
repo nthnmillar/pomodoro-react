@@ -1,20 +1,16 @@
 import React, {useState, useEffect } from 'react';
 import SoundPlay from './SoundPlay';
-import Playing from './SoundPlay';
 import 'bootstrap';
-    
+
 function useKey(key){
-  let playing = false;
   const [press, setPress] = useState(false)
   const match = event => key.toLowerCase() === event.key.toLowerCase()
   
   const onDown = event => {
-    if (match(event)) setPress(true);
-    playing = true; 
+    if (match(event)) setPress(false);
   }
   const onUp = event => {
-    if (match(event)) setPress(false);
-    playing = false; 
+    if (match(event)) setPress(true);
   }
 
   useEffect(() => {
@@ -26,11 +22,9 @@ function useKey(key){
     }
   },[key])
 
-  console.log("Key", key);
   SoundPlay(key);
   return press
 }
-
 
 function DrumButton(props){
     console.log("DrumButton", props.btnName);

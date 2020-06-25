@@ -45,11 +45,8 @@ function SoundPlay(name){
 
 function DrumSound(noise){
     console.log("audio", noise);
-    let audio = new Audio(noise);
-    let play = true
-      audio.play();
-      play = false;  
+    let audio = new Audio (noise);
+    audio.play();
 }
-
 
 export default SoundPlay;
