@@ -11,6 +11,8 @@ $h2-color:#b07a60;
 $font-color:#8fbbc4;
 $container-color:#2d2d2d;
 $display-color:#1e1e1e;
+$pad-color:#7e7e7e;
+$pad-shadow:#4e4e4e;
 
 body{
  font-family: $font-text;
@@ -20,7 +22,7 @@ body{
 
 #drum-machine{
  background:$container-color;
- height:455px;
+ height:459px;
  width: 400px;
  margin-top: 130px;
  padding:25px;
@@ -41,9 +43,15 @@ body{
 
 .drum-pad{
  height:110px;
- background:grey;
+ background:$pad-color;
  margin:5px;
  font-size: 20px;
  padding-top: 10%;
- border-radius: 30px;;
+ border-radius: 30px;
+ box-shadow: 0 5px $pad-shadow;
+}
+
+.drum-pad:active{
+box-shadow: 0 0px $display-color;
+transform: translateY(5px);
 }
