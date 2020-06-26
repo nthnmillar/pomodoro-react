@@ -11,57 +11,56 @@ import React, {useState, useEffect } from 'react';
 import SoundName from './SoundName';
 import 'bootstrap';
 
-
 function App(){
 
-function useKey(key){
-  const [press, setPress] = useState(false)
-  const match = event => key.toLowerCase() === event.key.toLowerCase()
-  
-  const onDown = event => {
-    if (match(event)) setPress(false);
-  }
-  const onUp = event => {
-    if (match(event)) setPress(true);
-  }
-
-  useEffect(() => {
-    window.addEventListener("keydown", onDown)
-    window.addEventListener("keyup", onUp)
-    return () => {
-      window.removeEventListener("keydown",onDown)
-      window.removeEventListener("keyup", onUp)
-    }
+  function useKey(key){
+    const [press, setPress] = useState(false)
+    const match = event => key.toLowerCase() === event.key.toLowerCase()
     
-  },[key])
-  
-  if (document.readyState === "complete"){
-    playSound(key);
-  }
-  return press
-}
+    const onDown = event => {
+      if (match(event)) setPress(false);
+    }
+    const onUp = event => {
+      if (match(event)) setPress(true);
+    }
 
-function playSound(key){ 
-  let audioHtml = document.getElementById(key).play();
-  document.getElementById("display").innerHTML= SoundName(key);
-  if (audioHtml !== undefined){
-    audioHtml.then( () => {
-      // Playback started 
-    }).catch( (error) => {
-      // failed.
-    });
+    useEffect(() => {
+      window.addEventListener("keydown", onDown)
+      window.addEventListener("keyup", onUp)
+      return () => {
+        window.removeEventListener("keydown",onDown)
+        window.removeEventListener("keyup", onUp)
+      }
+      
+    },[key])
+    
+    if (document.readyState === "complete"){
+      playSound(key);
+    }
+    return press
   }
-}
 
-function DrumButton(props){
-    return (
-    <div className="drum-pad col" id={"drum-pad-" + props.btnName} onClick={() => {playSound(props.btnName);}} >
-        <p className="text-center">{props.btnName}</p>       
-        <audio className="clip" id={props.btnName} src = {props.srcName}></audio>
-        {useKey(props.btnName)}
-      </div>
-    )
-}
+  function playSound(key){ 
+    let audioHtml = document.getElementById(key).play();
+    document.getElementById("display").innerHTML= SoundName(key);
+    if (audioHtml !== undefined){
+      audioHtml.then( () => {
+        // Playback started 
+      }).catch( (error) => {
+        // failed.
+      });
+    }
+  }
+
+  function DrumButton(props){
+      return (
+      <div className="drum-pad col" id={"drum-pad-" + props.btnName} onClick={() => {playSound(props.btnName);}} >
+          <p className="text-center">{props.btnName}</p>       
+          <audio className="clip" id={props.btnName} src = {props.srcName}></audio>
+          {useKey(props.btnName)}
+        </div>
+      )
+  }
 
   return (
       <div className="container" id="drum-machine">

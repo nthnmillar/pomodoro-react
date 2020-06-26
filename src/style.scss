@@ -20,20 +20,30 @@ body{
 
 #drum-machine{
  background:$container-color;
- height:388px;
+ height:455px;
  width: 400px;
- margin-top: 100px;
- padding:10px;
+ margin-top: 130px;
+ padding:25px;
+ border-radius: 10px;;
 }
 
 #display{
  background: $display-color;
  height:40px;
+ width: 250px;
+ margin-left: auto;
+ margin-right: auto;
+ text-align: center;
+ padding-top: 7px;
+ margin-bottom: 20px;
+ border-radius: 5px;
 }
 
 .drum-pad{
- height:80px;
+ height:110px;
  background:grey;
- margin:17px;
- padding-top: 7%;
+ margin:5px;
+ font-size: 20px;
+ padding-top: 10%;
+ border-radius: 30px;;
 }
