@@ -1,6 +1,6 @@
 {
-  "homepage": "http://nthnmillar.github.io/drum-machine-react",
-  "name": "drum-machine-react",
+  "homepage": "http://nthnmillar.github.io/calculator-react",
+  "name": "calculator-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,7 +14,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
-    "soundfont-player": "^0.12.0",
     "yarn": "^1.22.4"
   },
   "scripts": {
