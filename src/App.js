@@ -8,12 +8,11 @@ import drum7 from './audio/909-Kick-T3A0D0.wav';
 import drum8 from './audio/909-Kick-T7A0D0.wav';
 import drum9 from './audio/909-LoTom-0D0.wav';
 import React, {useState, useEffect } from 'react';
+import SoundName from './SoundName';
 import 'bootstrap';
 
 
 function App(){
-
-  let [display,setDisplay] = useState(""); 
 
 function useKey(key){
   const [press, setPress] = useState(false)
@@ -35,32 +34,28 @@ function useKey(key){
     }
     
   },[key])
-
-  console.log("pressed key", key)
-  console.log("press", press)
   
   if (document.readyState === "complete"){
     playSound(key);
-  //  setDisplay(key);
   }
-  /*
-  if (press){  
-    setDisplay(key);
-  } 
-  */
   return press
 }
 
 function playSound(key){ 
-    document.getElementById(key).play();
-   // console.log("setDisplay", display);   
-    
+  let audioHtml = document.getElementById(key).play();
+  document.getElementById("display").innerHTML= SoundName(key);
+  if (audioHtml !== undefined){
+    audioHtml.then( () => {
+      // Playback started 
+    }).catch( (error) => {
+      // failed.
+    });
+  }
 }
 
 function DrumButton(props){
-    console.log("DrumButton", props.btnName);
     return (
-    <div className="drum-pad col" id={"drum-pad-" + props.btnName} onClick={() => {playSound(props.btnName); alert("Alert function for audio & setState error");setDisplay(props.btnName);}} >
+    <div className="drum-pad col" id={"drum-pad-" + props.btnName} onClick={() => {playSound(props.btnName);}} >
         <p className="text-center">{props.btnName}</p>       
         <audio className="clip" id={props.btnName} src = {props.srcName}></audio>
         {useKey(props.btnName)}
@@ -68,21 +63,10 @@ function DrumButton(props){
     )
 }
 
-/*
-function Display(props){
-  return (
-    <div id="display">
-      <p>{props.screen}</p>
-  </div>
-  )
-}
-*/
-
   return (
       <div className="container" id="drum-machine">
           <div id="display">
-            <p>{display}</p>
-          </div>   
+          </div>
           <div className="row" id="row-1">  
             <DrumButton btnName="Q" srcName={drum1}/>
             <DrumButton btnName="W" srcName={drum2}/>
@@ -103,7 +87,3 @@ function Display(props){
 }
 
 export default App;
-
-//  <Display screen={display}/>  
-//  onClick={setDisplay(props.btnName)
-// playSound(props.btnName); 
