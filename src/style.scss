@@ -1,7 +1,7 @@
 @import '~bootstrap/scss/bootstrap.scss';
 @import url(https://fonts.googleapis.com/css?family=Orbitron);
 
-$body-bg:grey;
+$body-bg:#383838;
 $font-text: 'Orbitron', sans-serif;
 $h1-color:#5c9ac9;
 $calc-base:#fff;
@@ -21,7 +21,7 @@ body{
 }
 
 #calcBase{
-    margin-top:80px;
+    margin-top:130px;
     margin-bottom:80px;
     background:$calc-base;
     height:445px;
