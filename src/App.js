@@ -62,8 +62,7 @@ function ACFunc(){
   setDisplaySum(sum);
  */
   document.getElementById("disNum").innerHTML = entry;
-  document.getElementById("disString").innerHTML = sum;
-  
+  document.getElementById("disString").innerHTML = sum; 
 }
 
 //Removes last entry
@@ -75,19 +74,28 @@ function CEFunc(){
   entry = "0";    
   //Removes an operator or group of numbers from display string 2
 
+  const endClip = /\+$|\-$|\&#247;$|\&#215;$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/;
+
+  console.log("CE sum before replace",sum)
+  
+  sum = sum.replace(endClip,"");
+  console.log("CE sum after replace",sum)
+
+  /*
   if (typeof sum !== 'string')
     {
       console.log("Sum IS string")
       console.log("CE sum before replace",sum)
-      sum.replace(/\+$|\-$|\&#247;$|\&#215;$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/,"");
+      sum.replace(endClip,"");
       console.log("CE sum after replace",sum)
     }else{  
       console.log("Sum NOT string")
       sum.toString();
       console.log("CE sum before replace",sum)
-      sum.replace(/\+$|\-$|\&#247;$|\&#215;$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/,"");
+      sum.replace(endClip,"");
       console.log("CE sum after replace",sum)
     }
+    */
 
   //A zero remains if CE removes everything from display string 2  
   if(sum === ""){
