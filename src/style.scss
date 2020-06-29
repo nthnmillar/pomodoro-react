@@ -1,56 +1,114 @@
 @import '~bootstrap/scss/bootstrap.scss';
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,423;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,423;1,500;1,600;1,700&display=swap');
+@import url(https://fonts.googleapis.com/css?family=Orbitron);
 
-$body-bg:#3c3c3c;
-$header-text:'Roboto', sans-serif;
-$font-text: 'Roboto Mono', monospace;
+$body-bg:grey;
+$font-text: 'Orbitron', sans-serif;
 $h1-color:#5c9ac9;
+$calc-base:#fff;
+$display:lightgrey;
+$display-border:grey;
 $h2-color:#b07a60;
 $font-color:#8fbbc4;
-$container-color:blue;
-$display-color:#1e1e1e;
-$pad-color:#7e7e7e;
-$pad-shadow:#4e4e4e;
+$btn:#6496c8;
+$btn-text:#fff;
+$btn-shadow:#27496d;
+$disString: darkgrey;
+
+
 
 body{
- font-family: $font-text;
- background-color: $body-bg;
- color: $font-color;
+    background:$body-bg;
 }
 
-#drum-machine{
- background:$container-color;
- height:459px;
- width: 400px;
- margin-top: 130px;
- padding:25px;
- border-radius: 10px;;
+#calcBase{
+    margin-top:80px;
+    margin-bottom:80px;
+    background:$calc-base;
+    height:445px;
+    width:300px;
+    border-radius:30px;
+}
+
+#padDiv{
+    height:390px;
+    width:250px;
+    margin:auto;
+}
+
+h1,p,button {
+    font-family: $font-text;
+}
+
+h1{
+    padding-top:14px;
+    padding-bottom:4px;
+    font-size:20px;
+    font-weight:bold;
 }
 
 #display{
- background: $display-color;
- height:40px;
- width: 250px;
- margin-left: auto;
- margin-right: auto;
- text-align: center;
- padding-top: 7px;
- margin-bottom: 20px;
- border-radius: 5px;
+    background: $display;
+    width:243px;
+    height:55px;
+    margin: 0px auto 10px auto;
+    border-radius:5px;
+    border-style:solid;
+    border-width:2px;
+    border-color:$display-border;
 }
 
-.drum-pad{
- height:110px;
- background:$pad-color;
- margin:5px;
- font-size: 20px;
- padding-top: 10%;
- border-radius: 30px;
- box-shadow: 0 5px $pad-shadow;
+p{
+    font-size:30px;
 }
 
-.drum-pad:active{
-box-shadow: 0 0px $display-color;
-transform: translateY(5px);
+#disNum{
+    padding-bottom:0px;
+    margin-bottom:0px;
+    padding-right:5px;
 }
+#disString{
+    padding-top:0px;
+    padding-right:8px;
+    margin-top:0px;
+    line-height:4px;
+    font-size:12px;
+    color:$disString;
+}
+
+button{
+    float:left;
+    margin: 5px 5px 5px 5px;
+    padding: 5px 0px 5px 0px;
+    height:50px;
+    width:52.5px;
+    line-height:1px;
+    font-weight:bold;
+    font-size:20px;
+    appearance: none;
+    box-shadow:none;
+    border-radius:0;
+    color: $btn-text;
+    background-color:$btn ;
+    border: none;
+    border-radius: 7px;
+    box-shadow: 0 5px $btn-shadow;
+}
+
+button:active{
+    box-shadow: 0 0px $btn-shadow;
+    transform: translateY(5px);
+}
+
+button:focus {
+    outline:none;
+}
+
+#zero{
+    width: 115px;
+}
+
+#equals{
+    float:right;
+    height:110px;
+}
+

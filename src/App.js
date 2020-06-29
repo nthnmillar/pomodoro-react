@@ -1,87 +1,41 @@
-import drum1 from './audio/909-HiHatClosed-D2.wav';
-import drum2 from './audio/909-HiHatOpen-D0.wav';
-import drum3 from './audio/909-HiTom-0D0.wav';
-import drum4 from './audio/909-HiTom-7D0.wav';
-import drum5 from './audio/909-HiTom-AD0.wav';
-import drum6 from './audio/909-Kick-T0A0A7.wav';
-import drum7 from './audio/909-Kick-T3A0D0.wav';
-import drum8 from './audio/909-Kick-T7A0D0.wav';
-import drum9 from './audio/909-LoTom-0D0.wav';
+
 import React, {useState, useEffect } from 'react';
-import SoundName from './SoundName';
 import 'bootstrap';
 
 function App(){
 
-  function useKey(key){
-    const [press, setPress] = useState(false)
-    const match = event => key.toLowerCase() === event.key.toLowerCase()
-    
-    const onDown = event => {
-      if (match(event)) setPress(false);
-    }
-    const onUp = event => {
-      if (match(event)) setPress(true);
-    }
-
-    useEffect(() => {
-      window.addEventListener("keydown", onDown)
-      window.addEventListener("keyup", onUp)
-      return () => {
-        window.removeEventListener("keydown",onDown)
-        window.removeEventListener("keyup", onUp)
-      }
-      
-    },[key])
-    
-    if (document.readyState === "complete"){
-      playSound(key);
-    }
-    return press
-  }
-
-  function playSound(key){ 
-    let audioHtml = document.getElementById(key).play();
-    document.getElementById("display").innerHTML= SoundName(key);
-    if (audioHtml !== undefined){
-      audioHtml.then( () => {
-        // Playback started 
-      }).catch( (error) => {
-        // failed.
-      });
-    }
-  }
-
-  function DrumButton(props){
-      return (
-      <div className="drum-pad col" id={"drum-pad-" + props.btnName} onClick={() => {playSound(props.btnName);}} >
-          <p className="text-center">{props.btnName}</p>       
-          <audio className="clip" id={props.btnName} src = {props.srcName}></audio>
-          {useKey(props.btnName)}
-        </div>
-      )
-  }
-
   return (
-      <div className="container" id="drum-machine">
-          <div id="display">
-          </div>
-          <div className="row" id="row-1">  
-            <DrumButton btnName="Q" srcName={drum1}/>
-            <DrumButton btnName="W" srcName={drum2}/>
-            <DrumButton btnName="E" srcName={drum3}/>                                  
-          </div>
-          <div className="row">  
-            <DrumButton btnName="A" srcName={drum4}/>
-            <DrumButton btnName="S" srcName={drum5}/>
-            <DrumButton btnName="D" srcName={drum6}/>                                  
-          </div>
-          <div className="row">  
-            <DrumButton btnName="Z" srcName={drum7}/>
-            <DrumButton btnName="X" srcName={drum8}/>
-            <DrumButton btnName="C" srcName={drum9}/>                                  
-          </div>     
-      </div>     
+    <div id="calcBase" class= "container">   
+      <div id="padDiv">
+        <h1 class="text-center">CALCULATOR</h1>
+        <div id="display" class="text-right">
+            <p id="disNum"></p>
+            <p id="disString"></p>
+        </div>
+          <button onClick="ACFunc()" id="clear">AC</button>
+          <button onClick="CEFunc()" id="CE">CE</button>
+          <button onClick="dviFunc()" id="divide">&#247;</button>
+          <button onClick="multFunc()" id="multiply">&#215;</button>
+        
+          <button onClick="sevenFunc()" id="seven">7</button>
+          <button onClick="eightFunc()" id="eight">8</button>
+          <button onClick="nineFunc()" id="nine">9</button>
+          <button onClick="minusFunc()" id="subtract">-</button>
+        
+          <button onClick="fourFunc()" id="four">4</button>
+          <button onClick="fiveFunc()" id="five">5</button>
+          <button onClick="sixFunc()" id="six">6</button>
+          <button onClick="plusFunc()" id="add">+</button>
+          
+          <button onClick="oneFunc()" id="one">1</button>
+          <button onClick="twoFunc()" id="two">2</button>
+          <button onClick="threeFunc()" id="three">3</button>
+        
+          <button onClick="equalFunc()" id="equals">=</button>     
+          <button onClick="zeroFunc()" id="zero">0</button>
+          <button onClick="decPFunc()" id="decimal">.</button>   
+      </div>          
+    </div>
     )
 }
 
