@@ -5,58 +5,6 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider, connect } from 'react-redux';
 
-// Actions Type
-
-const DISPLAY_ENTRY = 'entry';
-const DISPLAY_SUM = 'sum'; 
-
-// Actions
-const displayEntryAction = (entry) => ({
-  type: DISPLAY_ENTRY,
-  payload: entry,
-});
-
-const displaySumAction = (sum) => ({
-  type: DISPLAY_SUM,
-  payload: sum,
-});
-
-// Reducers 
-const mathReducer = (state = {entry:"0", sum:"0"}, action) =>{ 
-  if (action.type === DISPLAY_ENTRY){
-    return {entry: action.payload};
-  }
-  else if (action.type === DISPLAY_SUM){
-    return {sum: action.payload};
-  }
-  return state;
-}
-
-// Root Reducers
-const rootReducer = combineReducers({
-  math: mathReducer,
-});
-
-// Store
-const store = createStore(
-  rootReducer /*, composeWithDevTools(
-    applyMiddleware(...middleware), 
-) */ );
-
-// mapStatetoProps
-const mapStatetoProps = (state => {
-  return {
-    entry:state.math.entry,
-    sum:state.math.sum,
-  };
-});
-
-// mapDispatchToProps
-const mapDispatchToProps = dispatch => ({
-    displayEntry: () => dispatch(displayEntryAction()),
-    displaySum: () => dispatch(displaySumAction()),
-});
-
 
 //Stores the first string for the display screen
 let entry= "0";
@@ -71,22 +19,24 @@ let decPPressed = false;
 let eqPressed = false;
 
 //Displays 0 on the screen when the document loads
-// function zeroStart(){document.getElementById("display").innerHTML = entry; document.getElementById("disString").innerHTML = sum;}
+//document.getElementById("display").innerHTML = entry; 
+//document.getElementById("disString").innerHTML = sum;
 
 //Checks if the strings have reached a maximum length before being too long to fit on the display screen
 function max(){
-  console.log("max sum", sum);
-  const maxLength = sum.replace(/\&#247;|\&#215;/g, " ");
-  console.log("max sum Replaced", maxLength);
 
-
-
-  if (entry.length > 8 || maxLength.length >= 23){
-    console.log(sum);
-    return true;
-  }else{
-    return false;
-  }
+ // if (!eqPressed  && sum !== Array ){
+    console.log("max sum", sum);
+    const maxLength = sum.toString().replace(/\&#247;|\&#215;/g, " ");
+    console.log("max sum Replaced", maxLength);
+    
+    if (entry.length > 8 || maxLength.length >= 23){
+      console.log(sum);
+      return true;
+    }else{
+      return false;
+    }
+ // }
 }
 
 //For clearing the screen
@@ -100,8 +50,7 @@ function limit(){
     */ 
         document.getElementById("display").innerHTML = "0";
         document.getElementById("disString").innerHTML ="Limit";
-       
-    
+          
 }
 
 //Resets the calculator
@@ -203,15 +152,30 @@ function numFunc(num){
      sum="";
      calc = 0;
      eqPressed = false; 
+    }
+    // if num is -
+    /*
+    else if(num === "-" && entry !== num && /\-$/.test(sum) === false) {
+      entry = num;
+      sum += num;
+      console.log("- for negetive integer added")
+      {document.getElementById("display").innerHTML = entry;}
+      {document.getElementById("disString").innerHTML = sum;}
+      return
     } 
+    */
+
     //Clears zero from string 1 on the screen if the CE button has been pressed
+
     if(entry === "0" && cePressed === true){entry="";}
     //Turns the operator switch off
     opPressed = false; 
     //Removes operator if on string 1
-    entry = entry.replace(/\+|\-|\&#247;|\&#215;/g, "");
+    entry = entry.replace(/\+|\&#247;|\&#215;/g, "");
+  //  entry = entry.replace(/\+|\-|\&#247;|\&#215;/g, "");
     //Adds entered number onto the display strings
-    if (cePressed === false){
+
+    if (cePressed === false /* && entry !== "-" */ ){
       entry += num;
       sum += num;
   /*
@@ -221,6 +185,8 @@ function numFunc(num){
       {document.getElementById("display").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
    
+    }else if (num === "-"){
+      
     } 
     //Only adds numbers after CE has been pressed if the last character is not a number
     else if (/\d$/.test(sum) !== true && cePressed === true){
@@ -242,12 +208,31 @@ function numFunc(num){
 
 //Inserts operators into display strings 1 and 2
 function operFunc(op){
+  //if (op === "-" && /\-$/.test(sum) === false  && /\+|\-|\&#247;|\&#215;/g.test(op)){
+
+  if (op === "-" && /\-$/.test(sum) === false){
+   numFunc("-");
+   console.log("Minus last line check",/\-$/.test(sum));
+   decPPressed = false;
+   return
+  }
+
+  if (op === "."){
+    console.log ("decimal point", op)
+  }
+ 
+
   //For being able to insert calculations after the equal button has been pressed
   if (eqPressed === true){
     eqPressed = false;
     sum = calc;
     calc = 0;
    }
+   /*
+   else if(eqPressed === true && op === "-"){
+     sum += op;
+   }
+   */
   
   if (max() === false){
     decPPressed = false;
@@ -273,18 +258,17 @@ function operFunc(op){
       {document.getElementById("display").innerHTML = entry;}
      
       //Only adds one operator to string 2 if string 2 is not 0 and the operator switch is off 
-     if(opPressed === false && sum !== "0"){
+     if(opPressed === false && sum !== "0"  && /\-$/.test(sum) === false){
        opPressed = true;
        sum += op;
         /*
        setDisplaySum(sum);
        */
-       {document.getElementById("disString").innerHTML = sum;}
-        
+       {document.getElementById("disString").innerHTML = sum;}       
      }      
       //If the CE button has been pressed with 0 now on display string 1 and there isn't already an operator on the display string 2, an operator should still be able to be entered    
     }
-    if(cePressed === true && opPressed === false && sum !== "0" && /\d$/.test(sum) === true){
+    if(cePressed === true && opPressed === false && sum !== "0" && /\d$/.test(sum) === true  && /\-$/.test(sum) === false){
       opPressed = true;
       entry = op;           
       sum += op;    
@@ -453,8 +437,8 @@ function equalFunc(){
 const Display = (props) => {
 return (
   <div id="screen" className="text-right">
-    <p id="display"></p>
-    <p id="disString"></p>
+    <p id="display">0</p>
+    <p id="disString">0</p>
   </div>
   )
 }
@@ -462,8 +446,8 @@ return (
 const Buttons = (props) => {
   return (
     <>
-      <button onClick={ACFunc} id="AC">AC</button>
-      <button onClick={CEFunc} id="clear">CE</button>
+      <button onClick={ACFunc} id="clear">AC</button>
+      <button onClick={CEFunc} id="CE">CE</button>
       <button onClick={dviFunc} id="divide">&#247;</button>
       <button onClick={multFunc} id="multiply">&#215;</button>
     
@@ -505,3 +489,60 @@ function App(){
 }
 
 export default App;
+
+
+
+// REDUX
+
+
+// Actions Type
+
+const DISPLAY_ENTRY = 'entry';
+const DISPLAY_SUM = 'sum'; 
+
+// Actions
+const displayEntryAction = (entry) => ({
+  type: DISPLAY_ENTRY,
+  payload: entry,
+});
+
+const displaySumAction = (sum) => ({
+  type: DISPLAY_SUM,
+  payload: sum,
+});
+
+// Reducers 
+const mathReducer = (state = {entry:"0", sum:"0"}, action) =>{ 
+  if (action.type === DISPLAY_ENTRY){
+    return {entry: action.payload};
+  }
+  else if (action.type === DISPLAY_SUM){
+    return {sum: action.payload};
+  }
+  return state;
+}
+
+// Root Reducers
+const rootReducer = combineReducers({
+  math: mathReducer,
+});
+
+// Store
+const store = createStore(
+  rootReducer /*, composeWithDevTools(
+    applyMiddleware(...middleware), 
+) */ );
+
+// mapStatetoProps
+const mapStatetoProps = (state => {
+  return {
+    entry:state.math.entry,
+    sum:state.math.sum,
+  };
+});
+
+// mapDispatchToProps
+const mapDispatchToProps = dispatch => ({
+    displayEntry: () => dispatch(displayEntryAction()),
+    displaySum: () => dispatch(displaySumAction()),
+});
