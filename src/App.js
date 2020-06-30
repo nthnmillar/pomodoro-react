@@ -1,6 +1,63 @@
 import React, {useState, useEffect } from 'react';
 import 'bootstrap';
 
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { Provider, connect } from 'react-redux';
+
+// Actions Type
+
+const DISPLAY_ENTRY = 'entry';
+const DISPLAY_SUM = 'sum'; 
+
+// Actions
+const displayEntryAction = (entry) => ({
+  type: DISPLAY_ENTRY,
+  payload: entry,
+});
+
+const displaySumAction = (sum) => ({
+  type: DISPLAY_SUM,
+  payload: sum,
+});
+
+// Reducers 
+const mathReducer = (state = {entry:"0", sum:"0"}, action) =>{ 
+  if (action.type === DISPLAY_ENTRY){
+    return {entry: action.payload};
+  }
+  else if (action.type === DISPLAY_SUM){
+    return {sum: action.payload};
+  }
+  return state;
+}
+
+// Root Reducers
+const rootReducer = combineReducers({
+  math: mathReducer,
+});
+
+// Store
+const store = createStore(
+  rootReducer /*, composeWithDevTools(
+    applyMiddleware(...middleware), 
+) */ );
+
+// mapStatetoProps
+const mapStatetoProps = (state => {
+  return {
+    entry:state.math.entry,
+    sum:state.math.sum,
+  };
+});
+
+// mapDispatchToProps
+const mapDispatchToProps = dispatch => ({
+    displayEntry: () => dispatch(displayEntryAction()),
+    displaySum: () => dispatch(displaySumAction()),
+});
+
+
 //Stores the first string for the display screen
 let entry= "0";
 //Stores the second string for the display screen
@@ -22,6 +79,8 @@ function max(){
   const maxLength = sum.replace(/\&#247;|\&#215;/g, " ");
   console.log("max sum Replaced", maxLength);
 
+
+
   if (entry.length > 8 || maxLength.length >= 23){
     console.log(sum);
     return true;
@@ -35,12 +94,13 @@ function limit(){
       entry = "0";
       sum = "0";
       calc = 0;
-     /*
+      /*
       setDisplayEntry("0");
       setDisplaySum("Limit");
-   */  
+    */ 
         document.getElementById("disNum").innerHTML = "0";
         document.getElementById("disString").innerHTML ="Limit";
+       
     
 }
 
@@ -57,12 +117,13 @@ function ACFunc(){
   //Clears strings
   entry = "0";
   sum = "0";
- /*
+  /*
   setDisplayEntry(entry);
   setDisplaySum(sum);
- */
+*/
   document.getElementById("disNum").innerHTML = entry;
   document.getElementById("disString").innerHTML = sum; 
+  
 }
 
 //Removes last entry
@@ -101,13 +162,13 @@ function CEFunc(){
   if(sum === ""){
       sum = "0";
     }
-        /*
+      /*  
     setDisplayEntry(entry);
     setDisplaySum(sum);
- */
+    */
     document.getElementById("disNum").innerHTML = entry;
     document.getElementById("disString").innerHTML = sum;
-   
+
 }
 
 //Activates functions when their buttons are pressed
@@ -147,20 +208,20 @@ function numFunc(num){
     if (cePressed === false){
       entry += num;
       sum += num;
-   /*
+  /*
       setDisplayEntry(entry);
       setDisplaySum(sum);
-     */
+       */
       {document.getElementById("disNum").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
-    
+   
     } 
     //Only adds numbers after CE has been pressed if the last character is not a number
     else if (/\d$/.test(sum) !== true && cePressed === true){
       cePressed = false;
       entry += num;
       sum += num;
-        /*
+      /*  
       setDisplayEntry(entry);
       setDisplaySum(sum);
      */
@@ -211,9 +272,9 @@ function operFunc(op){
        sum += op;
         /*
        setDisplaySum(sum);
-        */
+       */
        {document.getElementById("disString").innerHTML = sum;}
-       
+        
      }      
       //If the CE button has been pressed with 0 now on display string 1 and there isn't already an operator on the display string 2, an operator should still be able to be entered    
     }
@@ -221,10 +282,10 @@ function operFunc(op){
       opPressed = true;
       entry = op;           
       sum += op;    
-           /*  
+        /*     
       setDisplayEntry(entry);
       setDisplaySum(sum);
-         */
+        */ 
       {document.getElementById("disNum").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
    
@@ -241,25 +302,25 @@ if (max() === false){
   if(entry !== "0" && opPressed === false){
       entry += zero; 
       sum += zero;
-        /*
+       /* 
       setDisplayEntry(entry);
       setDisplaySum(sum);
-      */  
+        */  
       {document.getElementById("disNum").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
-       
+     
     }
     //Adds more zeros after the decimal point button has been pressed
     else if(decPPressed === true){   
       entry += "0";  
       sum += "0";
-        /*
+       /*
       setDisplayEntry(entry);
       setDisplaySum(sum);
-      */ 
+         */
       {document.getElementById("disNum").innerHTML = entry;} 
       {document.getElementById("disString").innerHTML = sum;}
-            
+           
      }
   }else{
     limit();
@@ -276,10 +337,10 @@ function decPFunc(){
         /*
       setDisplayEntry(entry);
       setDisplaySum(sum);
-      */ 
+       */ 
       {document.getElementById("disNum").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
-       
+      
      }
     //if there is an operator on the screen, place zero in front of decimal point when its button is pressed
     else if (decPPressed === false && opPressed === true && cePressed === false){
@@ -287,13 +348,13 @@ function decPFunc(){
         decPPressed = true;    
         entry = "0.";   
         sum += "0.";
-          /*
+       /*  
         setDisplayEntry(entry);
         setDisplaySum(sum);
-        */  
+          */
         {document.getElementById("disNum").innerHTML = entry;}
         {document.getElementById("disString").innerHTML = sum;} 
-         
+          
       } 
     //A decimal point can't be entered next to an already entered number after the CE button has been pressed
     else if (decPPressed === false && /\d$/.test(sum) !== true && cePressed === true){
@@ -301,13 +362,13 @@ function decPFunc(){
       decPPressed = true;
       entry = "0.";
       sum += "0.";
-       /*
+        /*
       setDisplayEntry(entry);
       setDisplaySum(sum);
       */
       {document.getElementById("disNum").innerHTML = entry;} 
       {document.getElementById("disString").innerHTML = sum;} 
-     
+    
           
     }
     
@@ -320,10 +381,10 @@ function decPFunc(){
         /*
       setDisplayEntry(entry);
       setDisplaySum(sum); 
-     */ 
+       */ 
       {document.getElementById("disNum").innerHTML = entry;} 
       {document.getElementById("disString").innerHTML = sum;} 
-       
+     
     }
   }else{
     limit();
@@ -366,10 +427,10 @@ function equalFunc(){
       }
       //Otherwise inserts the result onto the display screen
       else{
-          /*
+            /*
         setDisplayEntry(calc);
         setDisplaySum(sum +="="+calc); 
-         */
+       */
         document.getElementById("disNum").innerHTML = calc;
         document.getElementById("disString").innerHTML +="="+calc;
      
@@ -383,6 +444,44 @@ function equalFunc(){
   }
 }
 
+const Display = (props) => {
+return (
+  <div id="display" className="text-right">
+    <p id="disNum"></p>
+    <p id="disString"></p>
+  </div>
+  )
+}
+
+const Buttons = (props) => {
+  return (
+    <>
+      <button onClick={ACFunc} id="AC">AC</button>
+      <button onClick={CEFunc} id="clear">CE</button>
+      <button onClick={dviFunc} id="divide">&#247;</button>
+      <button onClick={multFunc} id="multiply">&#215;</button>
+    
+      <button onClick={sevenFunc} id="seven">7</button>
+      <button onClick={eightFunc} id="eight">8</button>
+      <button onClick={nineFunc} id="nine">9</button>
+      <button onClick={minusFunc} id="subtract">-</button>
+    
+      <button onClick={fourFunc} id="four">4</button>
+      <button onClick={fiveFunc} id="five">5</button>
+      <button onClick={sixFunc} id="six">6</button>
+      <button onClick={plusFunc} id="add">+</button>
+      
+      <button onClick={oneFunc} id="one">1</button>
+      <button onClick={twoFunc} id="two">2</button>
+      <button onClick={threeFunc} id="three">3</button>
+    
+      <button onClick={equalFunc} id="equals">=</button>     
+      <button onClick={zeroFunc} id="zero">0</button>
+      <button onClick={decPFunc} id="decimal">.</button> 
+    </> 
+  )
+}
+
 function App(){
   let [displayEntry,setDisplayEntry] = useState("0");
   // Stores the second string for the display screen
@@ -392,32 +491,8 @@ function App(){
     <div id="calcBase" className= "container">   
       <div id="padDiv">
         <h1 className="text-center">CALCULATOR</h1>
-        <div id="display" className="text-right">
-            <p id="disNum">{displayEntry}</p>
-            <p id="disString">{displaySum}</p>
-        </div>
-          <button onClick={ACFunc} id="AC">AC</button>
-          <button onClick={CEFunc} id="clear">CE</button>
-          <button onClick={dviFunc} id="divide">&#247;</button>
-          <button onClick={multFunc} id="multiply">&#215;</button>
-        
-          <button onClick={sevenFunc} id="seven">7</button>
-          <button onClick={eightFunc} id="eight">8</button>
-          <button onClick={nineFunc} id="nine">9</button>
-          <button onClick={minusFunc} id="subtract">-</button>
-        
-          <button onClick={fourFunc} id="four">4</button>
-          <button onClick={fiveFunc} id="five">5</button>
-          <button onClick={sixFunc} id="six">6</button>
-          <button onClick={plusFunc} id="add">+</button>
-          
-          <button onClick={oneFunc} id="one">1</button>
-          <button onClick={twoFunc} id="two">2</button>
-          <button onClick={threeFunc} id="three">3</button>
-        
-          <button onClick={equalFunc} id="equals">=</button>     
-          <button onClick={zeroFunc} id="zero">0</button>
-          <button onClick={decPFunc} id="decimal">.</button>   
+        <Display/>
+        <Buttons/>
       </div>          
     </div>
     )
