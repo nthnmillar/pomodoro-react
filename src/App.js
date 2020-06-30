@@ -71,7 +71,7 @@ let decPPressed = false;
 let eqPressed = false;
 
 //Displays 0 on the screen when the document loads
-// function zeroStart(){document.getElementById("disNum").innerHTML = entry; document.getElementById("disString").innerHTML = sum;}
+// function zeroStart(){document.getElementById("display").innerHTML = entry; document.getElementById("disString").innerHTML = sum;}
 
 //Checks if the strings have reached a maximum length before being too long to fit on the display screen
 function max(){
@@ -98,7 +98,7 @@ function limit(){
       setDisplayEntry("0");
       setDisplaySum("Limit");
     */ 
-        document.getElementById("disNum").innerHTML = "0";
+        document.getElementById("display").innerHTML = "0";
         document.getElementById("disString").innerHTML ="Limit";
        
     
@@ -121,7 +121,7 @@ function ACFunc(){
   setDisplayEntry(entry);
   setDisplaySum(sum);
 */
-  document.getElementById("disNum").innerHTML = entry;
+  document.getElementById("display").innerHTML = entry;
   document.getElementById("disString").innerHTML = sum; 
   
 }
@@ -138,8 +138,14 @@ function CEFunc(){
   const endClip = /\+$|\-$|\&#247;$|\&#215;$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/;
 
   console.log("CE sum before replace",sum)
-  
-  sum = sum.replace(endClip,"");
+  //   if (sum === Array && /=/g.test(sum) === true){
+  //   sum !== Array && /=/g.test(sum) === false
+  if (eqPressed){
+    return
+  }else if (!eqPressed){
+    console.log("epPressed", eqPressed, "sum", sum);
+    sum = sum.toString().replace(endClip,"");
+  }
   console.log("CE sum after replace",sum)
 
   /*
@@ -166,7 +172,7 @@ function CEFunc(){
     setDisplayEntry(entry);
     setDisplaySum(sum);
     */
-    document.getElementById("disNum").innerHTML = entry;
+    document.getElementById("display").innerHTML = entry;
     document.getElementById("disString").innerHTML = sum;
 
 }
@@ -212,7 +218,7 @@ function numFunc(num){
       setDisplayEntry(entry);
       setDisplaySum(sum);
        */
-      {document.getElementById("disNum").innerHTML = entry;}
+      {document.getElementById("display").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
    
     } 
@@ -225,7 +231,7 @@ function numFunc(num){
       setDisplayEntry(entry);
       setDisplaySum(sum);
      */
-      {document.getElementById("disNum").innerHTML = entry;}
+      {document.getElementById("display").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
      
     }
@@ -264,7 +270,7 @@ function operFunc(op){
        /*
       setDisplayEntry(entry);
       */
-      {document.getElementById("disNum").innerHTML = entry;}
+      {document.getElementById("display").innerHTML = entry;}
      
       //Only adds one operator to string 2 if string 2 is not 0 and the operator switch is off 
      if(opPressed === false && sum !== "0"){
@@ -286,7 +292,7 @@ function operFunc(op){
       setDisplayEntry(entry);
       setDisplaySum(sum);
         */ 
-      {document.getElementById("disNum").innerHTML = entry;}
+      {document.getElementById("display").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
    
     }
@@ -306,7 +312,7 @@ if (max() === false){
       setDisplayEntry(entry);
       setDisplaySum(sum);
         */  
-      {document.getElementById("disNum").innerHTML = entry;}
+      {document.getElementById("display").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
      
     }
@@ -318,7 +324,7 @@ if (max() === false){
       setDisplayEntry(entry);
       setDisplaySum(sum);
          */
-      {document.getElementById("disNum").innerHTML = entry;} 
+      {document.getElementById("display").innerHTML = entry;} 
       {document.getElementById("disString").innerHTML = sum;}
            
      }
@@ -338,7 +344,7 @@ function decPFunc(){
       setDisplayEntry(entry);
       setDisplaySum(sum);
        */ 
-      {document.getElementById("disNum").innerHTML = entry;}
+      {document.getElementById("display").innerHTML = entry;}
       {document.getElementById("disString").innerHTML = sum;}
       
      }
@@ -352,7 +358,7 @@ function decPFunc(){
         setDisplayEntry(entry);
         setDisplaySum(sum);
           */
-        {document.getElementById("disNum").innerHTML = entry;}
+        {document.getElementById("display").innerHTML = entry;}
         {document.getElementById("disString").innerHTML = sum;} 
           
       } 
@@ -366,9 +372,8 @@ function decPFunc(){
       setDisplayEntry(entry);
       setDisplaySum(sum);
       */
-      {document.getElementById("disNum").innerHTML = entry;} 
+      {document.getElementById("display").innerHTML = entry;} 
       {document.getElementById("disString").innerHTML = sum;} 
-    
           
     }
     
@@ -382,7 +387,7 @@ function decPFunc(){
       setDisplayEntry(entry);
       setDisplaySum(sum); 
        */ 
-      {document.getElementById("disNum").innerHTML = entry;} 
+      {document.getElementById("display").innerHTML = entry;} 
       {document.getElementById("disString").innerHTML = sum;} 
      
     }
@@ -420,6 +425,7 @@ function equalFunc(){
           }  
       }
       //Rounds off the calcuation into a string with limited decimals and removes excess zeros
+      console.log("Equal calc",calc);
       calc = calc.toFixed(2).replace(/\.0+$|0+$/,"");
       //Clears the screen of the result is too long
       if (calc.length > 8){ 
@@ -431,7 +437,7 @@ function equalFunc(){
         setDisplayEntry(calc);
         setDisplaySum(sum +="="+calc); 
        */
-        document.getElementById("disNum").innerHTML = calc;
+        document.getElementById("display").innerHTML = calc;
         document.getElementById("disString").innerHTML +="="+calc;
      
         eqPressed = true;
@@ -446,8 +452,8 @@ function equalFunc(){
 
 const Display = (props) => {
 return (
-  <div id="display" className="text-right">
-    <p id="disNum"></p>
+  <div id="screen" className="text-right">
+    <p id="display"></p>
     <p id="disString"></p>
   </div>
   )
