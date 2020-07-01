@@ -103,12 +103,19 @@ const numPress = (num) => {
 }
 
 const operatorPress = (op) => {
-  if (op === "-" && /\-$/.test(screenSum) === false){
+  if (op === "-" && /\-$ |/.test(screenSum) === false){
     numPress("-");
     console.log("Minus last line check",/\-$/.test(screenSum));
     decPointPressed = false;
     return
   }
+
+  if (/\D$/.test(screenSum) === true){
+    numPress(op);
+    decPointPressed = false;
+    return
+  }
+
 
   if (equalPressed === true){
     equalPressed = false;
@@ -181,7 +188,7 @@ const decPointPress = () => {
       displaySet(screenEntry, screenSum);  
 
     }else if (decPointPressed === false && operatorPressed === true && cePressed === false){
-      operatorPressed =false;
+      operatorPressed = false;
       decPointPressed = true;    
       screenEntry = "0.";   
       screenSum += "0.";
@@ -208,45 +215,66 @@ const decPointPress = () => {
 
 const equalPress = () => {
   if (/\d$/.test(screenSum) === true){
-   screenSum = screenSum.replace(/\&#247;/g, "/").replace(/\&#215;/g, "*").replace(/(\/)/g, " $1 ").replace(/(\*)/g, " $1 ").replace(/(\+)/g, " $1 ").replace(/((?!^)\-)/g, " $1 ").split(" ");
-   
-      for(var i = 0; i < screenSum.length; i++){
-          if (i === 0 ){
-            calculation += parseFloat(screenSum[i]);
-          }
- 
-          if (/\//.test(screenSum[i]) === true){
-            calculation /= parseFloat(screenSum[i + 1]);
-          }  
-  
-          if (/\*/.test(screenSum[i]) === true){
-            calculation *= parseFloat(screenSum[i + 1]);
-          }  
- 
-          if (/\+/.test(screenSum[i]) === true){
-            calculation += parseFloat(screenSum[i + 1]);
-          }
-   
-          if (/^\-$/.test(screenSum[i]) === true){
-            calculation -= parseFloat(screenSum[i + 1]);
-          }  
+    screenSum = screenSum.replace(/\&#247;/g, "/").replace(/\&#215;/g, "*").replace(/(\/)/g, " $1 ").replace(/(\*)/g, " $1 ").replace(/(\+)/g, " $1 ").replace(/((?!^)\-)/g, " $1 ").split(" ");
+    console.log("equalPress screenSum", screenSum);
+
+    // Sort Array
+    // spaces
+    for(var i = 0; i < screenSum.length; i++){
+      if(screenSum[i] === ""){  
+        screenSum.splice(i,1); 
+        console.log ("space removed", screenSum);   
       }
+      //negetive integers
+      if (screenSum[i] === "-" && Number.isInteger(parseInt(screenSum[i-1])) === false){
+        const negInt = screenSum[i].concat(screenSum[i+1]);
+        screenSum.splice(i,1);
+        screenSum.splice(i,1);
+        screenSum.splice(i,0,negInt) 
+        console.log("negetive interger", screenSum);
+      //calculation += parseFloat(screenSum[i]);    
+      }
+    }
+    // Calculate Array
+    for(var i = 0; i < screenSum.length; i++){
+
+      if (i === 0 ){
+        calculation += parseFloat(screenSum[i]);
+      }
+ 
+      if (screenSum[i] === "/"){
+        calculation /= parseFloat(screenSum[i + 1]);
+      }  
+  
+      if (screenSum[i] === "*"){
+        calculation *= parseFloat(screenSum[i + 1]);
+      }  
+ 
+      if (screenSum[i] === "+"){
+        calculation += parseFloat(screenSum[i + 1]);
+      } 
+              
+      if(screenSum[i] === "-") {
+        console.log("just a minus");
+        calculation -= parseFloat(screenSum[i + 1]);
+      }
+    }
    
-      console.log("Equal calculation",calculation);
-      calculation = calculation.toFixed(2).replace(/\.0+$|0+$/,"");
+    console.log("Equal calculation",calculation);
+    calculation = calculation.toFixed(2).replace(/\.0+$|0+$/,"");
 
-      if (calculation.length > 8){ 
-        clearScreen();        
+    if (calculation.length > 8){ 
+    clearScreen();        
       
-      }else{
-        document.getElementById("display").innerHTML = calculation;
-        document.getElementById("disString").innerHTML +="="+calculation;  
-        equalPressed = true;
+    }else{
+      document.getElementById("display").innerHTML = calculation;
+      document.getElementById("disString").innerHTML +="="+calculation;  
+      equalPressed = true;
 
-        if (calculation === "0"){
-            screenEntry = "0";
-            screenSum = "0";
-        }
+      if (calculation === "0"){
+        screenEntry = "0";
+        screenSum = "0";
+      }
     }  
   }
 }
