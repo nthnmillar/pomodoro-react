@@ -314,7 +314,7 @@ const equalPress = () => {
     }
    
     console.log("Equal calculation",calculation);
-    calculation = calculation.toFixed(2).replace(/\.0+$|0+$/,"");
+    calculation = calculation.toFixed(4).replace(/\.0+$|0+$/,"");
 
     if (calculation.length > 8){ 
     clearScreen();        
