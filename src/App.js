@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import 'bootstrap';
 
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { Provider, connect } from 'react-redux';
+
 let screenEntry= "0";
 let screenSum = "0";
 let calculation = 0;
@@ -11,10 +15,75 @@ let equalPressed = false;
 let currentOperator = "";
 let negIntMinus = false;
 
+// REDUX
+
+
+// Actions Type
+
+const DISPLAY_ENTRY = 'entry';
+const DISPLAY_SUM = 'sum'; 
+
+// Actions
+const displayEntryAction = (entry) => ({
+  type: DISPLAY_ENTRY,
+  payload: entry,
+});
+
+const displaySumAction = (sum) => ({
+  type: DISPLAY_SUM,
+  payload: sum,
+});
+
+// Reducers 
+const mathReducer = (state = {entry:"0", sum:"0"}, action) =>{ 
+  if (action.type === DISPLAY_ENTRY){
+    return {entry: action.payload};
+  }
+  else if (action.type === DISPLAY_SUM){
+    return {sum: action.payload};
+  }
+  return state;
+}
+
+// Root Reducers
+const rootReducer = combineReducers({
+  math: mathReducer,
+});
+
+// Store
+const store = createStore(
+  rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()  
+  /*, composeWithDevTools(
+    applyMiddleware(...middleware), 
+) */ );
+
+// mapStatetoProps
+const mapStatetoProps = (state => {
+  return {
+    entry:state.math.entry,
+    sum:state.math.sum,
+  };
+});
+
+// mapDispatchToProps
+const mapDispatchToProps = dispatch => ({
+    displayEntry: () => dispatch(displayEntryAction()),
+    displaySum: () => dispatch(displaySumAction()),
+});
+
+
+
+
+
+// To replace with redux actions/reducers
 const displaySet = (entry, sum) =>{
   document.getElementById("display").innerHTML = entry;
   document.getElementById("disString").innerHTML = sum;   
 }
+
+
+
+
 
 const maxLength = () =>{
     console.log("maxLength screenSum", screenSum);
@@ -281,11 +350,14 @@ const equalPress = () => {
   }
 }
 
-const Display = () => {
+const Display = (props) => {
+  /*let [displayscreenEntry,setDisplayscreenEntry] = useState("0");
+  let [displayscreenSum, setDisplayscreenSum] = useState("0");*/
+
   return (
     <div id="screen" className="text-right">
-      <p id="display">0</p>
-      <p id="disString">0</p>
+      <p id="display">{props.entry}</p>
+  <p id="disString">{props.sum}</p>
     </div>
     )
 }
@@ -315,18 +387,19 @@ const Buttons = () => {
   )
 }
 
-function App(){
-  let [displayscreenEntry,setDisplayscreenEntry] = useState("0");
-  let [displayscreenSum, setDisplayscreenSum] = useState("0");
-  
+const ConnectedDisplay = connect(mapStatetoProps, mapDispatchToProps)(Display);
+
+const App = () =>{ 
   return (
-    <div id="calcBase" className= "container">   
-      <div id="padDiv">
-        <h1 className="text-center">CALCULATOR</h1>
-        <Display/>
-        <Buttons/>
-      </div>          
-    </div>
+    <Provider store={store}>
+      <div id="calcBase" className= "container">   
+        <div id="padDiv">
+          <h1 className="text-center">CALCULATOR</h1>
+          <ConnectedDisplay/>
+          <Buttons/>
+        </div>          
+      </div>]
+    </Provider>  
     )
 }
 
