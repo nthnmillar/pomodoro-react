@@ -1,3 +1,8 @@
+// negetive intergers need to be created before calulation from equal button
+// deciaml numbers are getting split with the sumString is siplit into array in equalPress function
+
+// minus should only be passed to numPress if it has a number after it 
+
 import React, {useState} from 'react';
 import 'bootstrap';
 
@@ -8,11 +13,15 @@ let operatorPressed = false;
 let cePressed = false;
 let decPointPressed = false;
 let equalPressed = false;
+let currentOperator = "";
+let negIntMinus = false;
+
 
 const displaySet = (entry, sum) =>{
   document.getElementById("display").innerHTML = entry;
   document.getElementById("disString").innerHTML = sum;   
 }
+
 
 const maxLength = () =>{
     console.log("maxLength screenSum", screenSum);
@@ -66,7 +75,30 @@ const ceReset = () => {
     displaySet(screenEntry, screenSum);
 }
 
-const numPress = (num) => {  
+const numPress = (num) => {
+  
+  if (screenEntry === "-"  && /\d$/.test(num) == true){
+    screenSum += currentOperator;
+  //  screenEntry += num;
+ //   screenEntry += num  
+    screenSum += screenEntry;
+ //   screenSum += "-";
+ //   screenSum += num;
+
+    currentOperator = "";
+    document.getElementById("disString").innerHTML = screenSum; 
+  }
+  
+  //  if (/\D$/.test(screenEntry) && currentOperator !== "-") {    
+    if (screenEntry !== "-" && /\d$/.test(num) === true) {      
+      console.log("Number adds operator to Sum display", currentOperator, "screenSum", screenSum)
+      screenSum += currentOperator;
+      currentOperator = "";
+      document.getElementById("disString").innerHTML = screenSum; 
+    } 
+
+
+
   if (maxLength() === false){     
     if(screenEntry === "0" && screenSum === "0" || calculation === "0" && equalPressed === true){
       screenEntry="";
@@ -81,17 +113,17 @@ const numPress = (num) => {
       }
 
       operatorPressed = false; 
-      screenEntry = screenEntry.replace(/\+|\&#247;|\&#215;/g, "");
-    //screenEntry = screenEntry.replace(/\+|\-|\&#247;|\&#215;/g, "");
+     // screenEntry = screenEntry.replace(/\+|\&#247;|\&#215;/g, "");
+      screenEntry = screenEntry.replace(/\+|\-|\&#247;|\&#215;/g, "");
 
-    if (cePressed === false /* && screenEntry !== "-" */ ){
+    if (cePressed === false  && num !== "-" ){
       screenEntry += num;
       screenSum += num;
       displaySet(screenEntry, screenSum);   
 
     }else if (num === "-"){
         
-    }else if (/\d$/.test(screenSum) !== true && cePressed === true){
+    }else if (/\d$/.test(screenSum) !== true && cePressed === true  && num !== "-" ){
       cePressed = false;
       screenEntry += num;
       screenSum += num;
@@ -103,7 +135,8 @@ const numPress = (num) => {
 }
 
 const operatorPress = (op) => {
-  if (op === "-" && /\-$ |/.test(screenSum) === false){
+  /*
+  if (op === "-" && /\-$/.test(screenSum) === false){
     numPress("-");
     console.log("Minus last line check",/\-$/.test(screenSum));
     decPointPressed = false;
@@ -115,6 +148,7 @@ const operatorPress = (op) => {
     decPointPressed = false;
     return
   }
+  */
 
 
   if (equalPressed === true){
@@ -138,22 +172,36 @@ const operatorPress = (op) => {
       screenSum = screenSum.replace(/0+$/, "");
     } 
 
-    if(screenEntry !== "0" && operatorPressed === false && screenSum !== "0"){
+    if(screenEntry !== "0" && operatorPressed === false  && screenSum !== "0"){
       screenEntry = op; 
       document.getElementById("display").innerHTML = screenEntry;
       
-      if(operatorPressed === false && screenSum !== "0"  && /\-$/.test(screenSum) === false){
-        operatorPressed = true;
-        screenSum += op;
-        document.getElementById("disString").innerHTML = screenSum;      
+      if(op !== "-"){
+        currentOperator = op;
+      }
+
+      if(operatorPressed === false && screenSum !== "0" /* &&  /\-$/.test(screenSum) === false */){
+     //   operatorPressed = true;
+     //   screenSum += op;
+     //   document.getElementById("disString").innerHTML = screenSum;      
+        if(op !== "-"){
+          currentOperator = op;
+        }
+
       }         
     }
 
-    if(cePressed === true && operatorPressed === false && screenSum !== "0" && /\d$/.test(screenSum) === true  && /\-$/.test(screenSum) === false){
+    if(cePressed === true  && operatorPressed === false  && screenSum !== "0" && /\d$/.test(screenSum) === true /* && /\-$/.test(screenSum) === false */){
       operatorPressed = true;
-      screenEntry = op;           
-      screenSum += op;    
-      displaySet(screenEntry,screenSum); 
+      screenEntry = op;  
+      
+      if(op !== "-"){
+        currentOperator = op;
+      }
+         
+     // screenSum += op;    
+     // displaySet(screenEntry,screenSum); 
+    // document.getElementById("disString").innerHTML = screenSum;
     }
   }else{
     clearScreen();
@@ -163,7 +211,7 @@ const operatorPress = (op) => {
 const zeroPress = (zero) => {
 if (maxLength() === false){    
 
-  if(screenEntry !== "0" && operatorPressed === false){
+  if(screenEntry !== "0"  && operatorPressed === false ){
       screenEntry += zero; 
       screenSum += zero;
       displaySet(screenEntry, screenSum);   
@@ -181,13 +229,13 @@ if (maxLength() === false){
 
 const decPointPress = () => {
   if (maxLength() === false){ 
-    if (decPointPressed === false && operatorPressed === false && cePressed === false){    
+    if (decPointPressed === false  && operatorPressed === false && cePressed === false){    
       decPointPressed = true;    
       screenEntry += ".";   
       screenSum += ".";
       displaySet(screenEntry, screenSum);  
 
-    }else if (decPointPressed === false && operatorPressed === true && cePressed === false){
+    }else if (decPointPressed === false  && operatorPressed === true  && cePressed === false){
       operatorPressed = false;
       decPointPressed = true;    
       screenEntry = "0.";   
@@ -201,7 +249,7 @@ const decPointPress = () => {
       screenSum += "0.";
       displaySet(screenEntry, screenSum);      
     
-    }else if (decPointPressed === false && operatorPressed === false && screenSum ==="0" && cePressed === true){
+    }else if (decPointPressed === false  && operatorPressed === false  && screenSum ==="0" && cePressed === true){
       cePressed = false;
       decPointPressed = true;
       screenEntry += ".";  
@@ -215,26 +263,31 @@ const decPointPress = () => {
 
 const equalPress = () => {
   if (/\d$/.test(screenSum) === true){
+    console.log("equalPress screenSum String", screenSum);
     screenSum = screenSum.replace(/\&#247;/g, "/").replace(/\&#215;/g, "*").replace(/(\/)/g, " $1 ").replace(/(\*)/g, " $1 ").replace(/(\+)/g, " $1 ").replace(/((?!^)\-)/g, " $1 ").split(" ");
-    console.log("equalPress screenSum", screenSum);
+    console.log("equalPress screenSum Array", screenSum);
 
-    // Sort Array
-    // spaces
+    // Sort Array 
     for(var i = 0; i < screenSum.length; i++){
+      // spaces
       if(screenSum[i] === ""){  
         screenSum.splice(i,1); 
-        console.log ("space removed", screenSum);   
+        console.log ("space removed", screenSum, "screenSum[i]", screenSum[i]);   
       }
-      //negetive integers
-      if (screenSum[i] === "-" && Number.isInteger(parseInt(screenSum[i-1])) === false){
+      // negetive integers
+      // Number.isInteger(parseInt(screenSum[i-1])) === false
+      if (screenSum[i] === "-" && /\+|\-|\*|\//.test(screenSum[i-1]) === true ){
         const negInt = screenSum[i].concat(screenSum[i+1]);
         screenSum.splice(i,1);
         screenSum.splice(i,1);
         screenSum.splice(i,0,negInt) 
         console.log("negetive interger", screenSum);
-      //calculation += parseFloat(screenSum[i]);    
+      // calculation += parseFloat(screenSum[i]);    
       }
     }
+    
+
+
     // Calculate Array
     for(var i = 0; i < screenSum.length; i++){
 
@@ -242,20 +295,20 @@ const equalPress = () => {
         calculation += parseFloat(screenSum[i]);
       }
  
-      if (screenSum[i] === "/"){
+      if (/\//.test(screenSum[i]) == true){
         calculation /= parseFloat(screenSum[i + 1]);
       }  
   
-      if (screenSum[i] === "*"){
+      if (/\*/.test(screenSum[i]) == true){
         calculation *= parseFloat(screenSum[i + 1]);
       }  
  
-      if (screenSum[i] === "+"){
+      if (/\+/.test(screenSum[i]) == true){
         calculation += parseFloat(screenSum[i + 1]);
       } 
               
-      if(screenSum[i] === "-") {
-        console.log("just a minus");
+      if(/^\-$/.test(screenSum[i]) == true) {
+        console.log("just a minus",calculation);
         calculation -= parseFloat(screenSum[i + 1]);
       }
     }
