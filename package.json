@@ -1,6 +1,6 @@
 {
-  "homepage": "http://nthnmillar.github.io/calculator-react",
-  "name": "calculator-react",
+  "homepage": "http://nthnmillar.github.io/pomodoro-react",
+  "name": "pomodoro-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
