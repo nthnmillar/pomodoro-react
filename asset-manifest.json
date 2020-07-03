@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/calculator-react/static/css/main.1cf06113.chunk.css",
-    "main.js": "/calculator-react/static/js/main.e80cb72a.chunk.js",
-    "main.js.map": "/calculator-react/static/js/main.e80cb72a.chunk.js.map",
-    "runtime-main.js": "/calculator-react/static/js/runtime-main.f105f787.js",
-    "runtime-main.js.map": "/calculator-react/static/js/runtime-main.f105f787.js.map",
-    "static/js/2.f0e7c85a.chunk.js": "/calculator-react/static/js/2.f0e7c85a.chunk.js",
-    "static/js/2.f0e7c85a.chunk.js.map": "/calculator-react/static/js/2.f0e7c85a.chunk.js.map",
-    "index.html": "/calculator-react/index.html",
-    "precache-manifest.b80f4fa4b4b96c84050f14074067c9c5.js": "/calculator-react/precache-manifest.b80f4fa4b4b96c84050f14074067c9c5.js",
-    "service-worker.js": "/calculator-react/service-worker.js",
-    "static/css/main.1cf06113.chunk.css.map": "/calculator-react/static/css/main.1cf06113.chunk.css.map",
-    "static/js/2.f0e7c85a.chunk.js.LICENSE.txt": "/calculator-react/static/js/2.f0e7c85a.chunk.js.LICENSE.txt"
+    "main.css": "/pomodoro-react/static/css/main.ca455853.chunk.css",
+    "main.js": "/pomodoro-react/static/js/main.88ef90bc.chunk.js",
+    "main.js.map": "/pomodoro-react/static/js/main.88ef90bc.chunk.js.map",
+    "runtime-main.js": "/pomodoro-react/static/js/runtime-main.353efe95.js",
+    "runtime-main.js.map": "/pomodoro-react/static/js/runtime-main.353efe95.js.map",
+    "static/js/2.379b63e3.chunk.js": "/pomodoro-react/static/js/2.379b63e3.chunk.js",
+    "static/js/2.379b63e3.chunk.js.map": "/pomodoro-react/static/js/2.379b63e3.chunk.js.map",
+    "index.html": "/pomodoro-react/index.html",
+    "precache-manifest.660879e4a820a9e60a0e06fd7c1bac4a.js": "/pomodoro-react/precache-manifest.660879e4a820a9e60a0e06fd7c1bac4a.js",
+    "service-worker.js": "/pomodoro-react/service-worker.js",
+    "static/css/main.ca455853.chunk.css.map": "/pomodoro-react/static/css/main.ca455853.chunk.css.map",
+    "static/js/2.379b63e3.chunk.js.LICENSE.txt": "/pomodoro-react/static/js/2.379b63e3.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.f105f787.js",
-    "static/js/2.f0e7c85a.chunk.js",
-    "static/css/main.1cf06113.chunk.css",
-    "static/js/main.e80cb72a.chunk.js"
+    "static/js/runtime-main.353efe95.js",
+    "static/js/2.379b63e3.chunk.js",
+    "static/css/main.ca455853.chunk.css",
+    "static/js/main.88ef90bc.chunk.js"
   ]
 }
