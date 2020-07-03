@@ -1,4 +1,6 @@
-// import {store, displayEntryAction, displaySumAction} from './App'
+
+import store from "./store";
+import {displayEntryAction, displaySumAction} from './actions/displayActions';
 
 let screenEntry= "0";
 let screenSum = "0";
@@ -17,7 +19,7 @@ const sumDispatched = (sum) => {
     store.dispatch(displaySumAction(sum));
 }
 
-const maxLength = () =>{
+const maxLength = () => {
     console.log("maxLength screenSum", screenSum);
     const maxLengthString = screenSum.toString().replace(/\&#247;|\&#215;/g, " ");
     console.log("maxLength screenSum Replaced", maxLengthString);
@@ -35,24 +37,20 @@ const clearScreen = () => {
     screenSum = "0";
     calculation = 0;
     entryDispatched("0");
-    sumDispatched("Limit");
-    //store.dispatch(displayEntryAction("0"));
-    //store.dispatch(displaySumAction("Limit"));      
+    sumDispatched("Limit");    
 }
 
-const acReset = () => {
+export function acReset(){
     calculation = 0;
     decPointPressed = false;
     equalPressed = false;
     screenEntry = "0";
     screenSum = "0";
     entryDispatched(screenEntry);
-    sumDispatched(screenSum);
-    //store.dispatch(displayEntryAction(screenEntry));
-   // store.dispatch(displaySumAction(screenSum));   
+    sumDispatched(screenSum);  
 }
 
-const ceReset = () => {  
+export function ceReset(){  
     operatorPressed = false;
     cePressed = true;
     decPointPressed = false;
@@ -73,19 +71,15 @@ const ceReset = () => {
     }
 
     entryDispatched(screenEntry);
-    sumDispatched(screenSum);
-   // store.dispatch(displayEntryAction(screenEntry));
-   // store.dispatch(displaySumAction(screenSum));   
-    
+    sumDispatched(screenSum);     
 }
 
-const numPress = (num) => { 
+export function numPress(num){ 
   if (screenEntry === "-"  && /\d$/.test(num) == true){
     screenSum += currentOperator;
     screenSum += screenEntry;
     currentOperator = "";
     sumDispatched(screenSum);
-  //  store.dispatch(displaySumAction(screenSum));
   } 
   
   if (screenEntry !== "-" && /\d$/.test(num) === true) {      
@@ -93,7 +87,6 @@ const numPress = (num) => {
     screenSum += currentOperator;
     currentOperator = "";
     sumDispatched(screenSum);
-  //  store.dispatch(displaySumAction(screenSum));
   } 
 
   if (maxLength() === false){     
@@ -116,9 +109,7 @@ const numPress = (num) => {
       screenEntry += num;
       screenSum += num;
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-    //  store.dispatch(displayEntryAction(screenEntry));
-    //  store.dispatch(displaySumAction(screenSum));   
+      sumDispatched(screenSum);   
     }
 
     else if (/\d$/.test(screenSum) !== true && cePressed === true  && num !== "-" ){
@@ -126,16 +117,14 @@ const numPress = (num) => {
       screenEntry += num;
       screenSum += num;
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-    //  store.dispatch(displayEntryAction(screenEntry));
-    //  store.dispatch(displaySumAction(screenSum));   
+      sumDispatched(screenSum); 
     }
   }else{
     clearScreen();
   }  
 }
 
-const operatorPress = (op) => {
+export function operatorPress(op){
   if (equalPressed === true){
     equalPressed = false;
     screenSum = calculation;
@@ -160,7 +149,6 @@ const operatorPress = (op) => {
     if(screenEntry !== "0" && operatorPressed === false  && screenSum !== "0"){
       screenEntry = op; 
       entryDispatched(screenEntry);
-      // store.dispatch(displayEntryAction(screenEntry));
       
       if(op !== "-"){
         currentOperator = op;
@@ -187,41 +175,35 @@ const operatorPress = (op) => {
   }
 }
 
-const zeroPress = (zero) => {
+export function zeroPress(zero){
 if (maxLength() === false){    
 
   if(screenEntry !== "0"  && operatorPressed === false ){
       screenEntry += zero; 
       screenSum += zero;
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-     // store.dispatch(displayEntryAction(screenEntry));
-     // store.dispatch(displaySumAction(screenSum));     
+      sumDispatched(screenSum);     
     }
 
     else if(decPointPressed === true){   
       screenEntry += "0";  
       screenSum += "0";
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-    //  store.dispatch(displayEntryAction(screenEntry));
-    //  store.dispatch(displaySumAction(screenSum));               
+      sumDispatched(screenSum);             
      }
   }else{
     clearScreen();
   }
 }
 
-const decPointPress = () => {
+export function decPointPress(){
   if (maxLength() === false){ 
     if (decPointPressed === false  && operatorPressed === false && cePressed === false){    
       decPointPressed = true;    
       screenEntry += ".";   
       screenSum += ".";
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-     // store.dispatch(displayEntryAction(screenEntry));
-    //  store.dispatch(displaySumAction(screenSum));    
+      sumDispatched(screenSum); 
 
     }else if (decPointPressed === false  && operatorPressed === true  && cePressed === false){
       operatorPressed = false;
@@ -229,9 +211,7 @@ const decPointPress = () => {
       screenEntry = "0.";   
       screenSum += "0.";
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-    //  store.dispatch(displayEntryAction(screenEntry));
-    //  store.dispatch(displaySumAction(screenSum));       
+      sumDispatched(screenSum);      
 
     }else if (decPointPressed === false && /\d$/.test(screenSum) !== true && cePressed === true){
       cePressed = false;
@@ -239,9 +219,7 @@ const decPointPress = () => {
       screenEntry = "0.";
       screenSum += "0.";
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-    //  store.dispatch(displayEntryAction(screenEntry));
-    //  store.dispatch(displaySumAction(screenSum));         
+      sumDispatched(screenSum);         
     
     }else if (decPointPressed === false  && operatorPressed === false  && screenSum ==="0" && cePressed === true){
       cePressed = false;
@@ -249,16 +227,14 @@ const decPointPress = () => {
       screenEntry += ".";  
       screenSum += ".";
       entryDispatched(screenEntry);
-      sumDispatched(screenSum);
-    //  store.dispatch(displayEntryAction(screenEntry));
-    //  store.dispatch(displaySumAction(screenSum));    
+      sumDispatched(screenSum);    
     }
   }else{
     clearScreen();
   }
 }
 
-const equalPress = () => {
+export function equalPress(){
   if (/\d$/.test(screenSum) === true){
     let sumToDisplay = screenSum;
     console.log("equalPress screenSum String", screenSum);
@@ -310,10 +286,8 @@ const equalPress = () => {
     }else{
         entryDispatched(calculation);
         sumDispatched(sumToDisplay += "=" + calculation);
-    //  store.dispatch(displayEntryAction(calculation));
-    //  store.dispatch(displaySumAction(sumToDisplay += "=" + calculation));
-      console.log("array clacuation return, calculation", "screenSum", screenSum, "is array?", Array.isArray(screenSum))  
-      equalPressed = true;
+        console.log("array clacuation return, calculation", "screenSum", screenSum, "is array?", Array.isArray(screenSum))  
+        equalPressed = true;
 
       if (calculation === "0"){
         screenEntry = "0";
@@ -323,4 +297,4 @@ const equalPress = () => {
   }
 }
 
-//export default {entryDispatched, sumDispatched};
+
