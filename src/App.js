@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import 'bootstrap';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-//import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider, connect } from 'react-redux';
 
 let screenEntry= "0";
@@ -13,11 +12,9 @@ let cePressed = false;
 let decPointPressed = false;
 let equalPressed = false;
 let currentOperator = "";
-let negIntMinus = false;
 
 
 // REDUX
-
 // Actions Type
 
 const DISPLAY_ENTRY = 'entry';
@@ -50,9 +47,6 @@ const mathSumReducer = (state = {sum:"0"}, action) =>{
   return state;
 }
 
-
-
-
 // Root Reducers
 const rootReducer = combineReducers({
   mathEntry: mathEntryReducer,
@@ -81,19 +75,9 @@ const mapDispatchToProps = dispatch => ({
     displaySum: () => dispatch(displaySumAction()),
 });
 
-
-// To replace with redux actions/reducers
-/*
-const displaySet = (entry, sum) =>{
-  document.getElementById("display").innerHTML = entry;
-  document.getElementById("disString").innerHTML = sum;   
-}
-*/
-
-
 const maxLength = () =>{
     console.log("maxLength screenSum", screenSum);
-    const maxLengthString = screenSum.toString().replace(/\÷|\×/g, " ");
+    const maxLengthString = screenSum.toString().replace(/\&#247;|\&#215;/g, " ");
     console.log("maxLength screenSum Replaced", maxLengthString);
     
     if (screenEntry.length > 8 || maxLengthString.length >= 23){
@@ -129,7 +113,7 @@ const ceReset = () => {
     cePressed = true;
     decPointPressed = false;
     screenEntry = "0";    
-    const endClip = /\+$|\-$|\÷$|\×$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/;
+    const endClip = /\+$|\-$|\&#247;$|\&#215;$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/;
     console.log("CE screenSum before replace",screenSum)
 
     if (equalPressed){
@@ -181,7 +165,7 @@ const numPress = (num) => {
     }
 
     operatorPressed = false; 
-    screenEntry = screenEntry.replace(/\+|\-|\÷|\×/g, "");
+    screenEntry = screenEntry.replace(/\+|\-|\&#247;|\&#215;/g, "");
 
     if (cePressed === false  && num !== "-" ){
       screenEntry += num;
@@ -325,7 +309,7 @@ const equalPress = () => {
   if (/\d$/.test(screenSum) === true){
     let sumToDisplay = screenSum;
     console.log("equalPress screenSum String", screenSum);
-    screenSum = screenSum.replace(/\÷/g, "/").replace(/\×/g, "*").replace(/(\/)/g, " $1 ").replace(/(\*)/g, " $1 ").replace(/(\+)/g, " $1 ").replace(/((?!^)\-)/g, " $1 ").split(" ");
+    screenSum = screenSum.replace(/\&#247;/g, "/").replace(/\&#215;/g, "*").replace(/(\/)/g, " $1 ").replace(/(\*)/g, " $1 ").replace(/(\+)/g, " $1 ").replace(/((?!^)\-)/g, " $1 ").split(" ");
     console.log("equalPress screenSum Array", screenSum);
 
     // Sort Array 
@@ -386,11 +370,10 @@ const equalPress = () => {
   }
 }
 
-
 const DisplayEntry = (props) => {
   return (
     <>
-      <p id="display">{props.entry}</p>
+      <p dangerouslySetInnerHTML={{ __html:props.entry}} id="display"></p>
     </>
   )
 }
@@ -398,7 +381,7 @@ const DisplayEntry = (props) => {
 const DisplaySum = (props) => {
   return (
     <>
-      <p id="disString">{props.sum}</p>
+      <p dangerouslySetInnerHTML={{ __html:props.sum}} id="disString"></p>
     </>
   )
 } 
@@ -411,8 +394,8 @@ const Buttons = () => {
     <>
       <button onClick={acReset} id="clear">AC</button>
       <button onClick={ceReset} id="CE">CE</button>
-      <button onClick={() => {operatorPress("÷")}} id="divide">÷</button>
-      <button onClick={() => {operatorPress("×")}} id="multiply">×</button>  
+      <button onClick={() => {operatorPress("&#247;")}} id="divide">&#247;</button>
+      <button onClick={() => {operatorPress("&#215;")}} id="multiply">&#215;</button>  
       <button onClick={() => {numPress("7")}} id="seven">7</button>
       <button onClick={() => {numPress("8")}} id="eight">8</button>
       <button onClick={() => {numPress("9")}} id="nine">9</button>

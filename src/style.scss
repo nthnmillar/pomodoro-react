@@ -12,7 +12,7 @@ $font-color:#8fbbc4;
 $btn:#6496c8;
 $btn-text:#fff;
 $btn-shadow:#27496d;
-$disString: rgb(129, 129, 129);
+$disString: #848484;
 
 
 
@@ -65,7 +65,8 @@ p{
     padding-bottom:0px;
     margin-bottom:0px;
     padding-right:5px;
-    height: 40px;
+    height: 39px;
+    line-height: 1.3;
 }
 #disString{
     padding-top:0px;
