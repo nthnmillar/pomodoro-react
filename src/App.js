@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import 'bootstrap';
 
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+//import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider, connect } from 'react-redux';
 
 let screenEntry= "0";
@@ -15,8 +15,8 @@ let equalPressed = false;
 let currentOperator = "";
 let negIntMinus = false;
 
-// REDUX
 
+// REDUX
 
 // Actions Type
 
@@ -35,19 +35,29 @@ const displaySumAction = (sum) => ({
 });
 
 // Reducers 
-const mathReducer = (state = {entry:"0", sum:"0"}, action) =>{ 
+const mathEntryReducer = (state = {entry:"0"}, action) =>{ 
   if (action.type === DISPLAY_ENTRY){
     return {entry: action.payload};
+
   }
-  else if (action.type === DISPLAY_SUM){
+  return state;
+}
+
+const mathSumReducer = (state = {sum:"0"}, action) =>{ 
+  if (action.type === DISPLAY_SUM){
     return {sum: action.payload};
   }
   return state;
 }
 
+
+
+
 // Root Reducers
 const rootReducer = combineReducers({
-  math: mathReducer,
+  mathEntry: mathEntryReducer,
+  mathSum: mathSumReducer
+
 });
 
 // Store
@@ -60,8 +70,8 @@ const store = createStore(
 // mapStatetoProps
 const mapStatetoProps = (state => {
   return {
-    entry:state.math.entry,
-    sum:state.math.sum,
+    entry:state.mathEntry.entry,
+    sum:state.mathSum.sum,
   };
 });
 
@@ -72,22 +82,18 @@ const mapDispatchToProps = dispatch => ({
 });
 
 
-
-
-
 // To replace with redux actions/reducers
+/*
 const displaySet = (entry, sum) =>{
   document.getElementById("display").innerHTML = entry;
   document.getElementById("disString").innerHTML = sum;   
 }
-
-
-
+*/
 
 
 const maxLength = () =>{
     console.log("maxLength screenSum", screenSum);
-    const maxLengthString = screenSum.toString().replace(/\&#247;|\&#215;/g, " ");
+    const maxLengthString = screenSum.toString().replace(/\÷|\×/g, " ");
     console.log("maxLength screenSum Replaced", maxLengthString);
     
     if (screenEntry.length > 8 || maxLengthString.length >= 23){
@@ -102,7 +108,9 @@ const clearScreen = () => {
     screenEntry = "0";
     screenSum = "0";
     calculation = 0;
-    displaySet("0","Limit");      
+   // displaySet("0","Limit");
+    store.dispatch(displayEntryAction("0"));
+    store.dispatch(displaySumAction("Limit"));      
 }
 
 const acReset = () => {
@@ -111,7 +119,9 @@ const acReset = () => {
     equalPressed = false;
     screenEntry = "0";
     screenSum = "0";
-    displaySet(screenEntry, screenSum);
+    //displaySet(screenEntry, screenSum);
+    store.dispatch(displayEntryAction(screenEntry));
+    store.dispatch(displaySumAction(screenSum));   
 }
 
 const ceReset = () => {  
@@ -119,7 +129,7 @@ const ceReset = () => {
     cePressed = true;
     decPointPressed = false;
     screenEntry = "0";    
-    const endClip = /\+$|\-$|\&#247;$|\&#215;$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/;
+    const endClip = /\+$|\-$|\÷$|\×$|\d+\.\d+$|\d+$|\.$|\d+\.$|^\-\d+$|^\-\d+\.\d+$/;
     console.log("CE screenSum before replace",screenSum)
 
     if (equalPressed){
@@ -134,7 +144,10 @@ const ceReset = () => {
       screenSum = "0";
     }
 
-    displaySet(screenEntry, screenSum);
+   // displaySet(screenEntry, screenSum);
+    store.dispatch(displayEntryAction(screenEntry));
+    store.dispatch(displaySumAction(screenSum));   
+    
 }
 
 const numPress = (num) => { 
@@ -142,14 +155,16 @@ const numPress = (num) => {
     screenSum += currentOperator;
     screenSum += screenEntry;
     currentOperator = "";
-    document.getElementById("disString").innerHTML = screenSum; 
+    store.dispatch(displaySumAction(screenSum));
+    //document.getElementById("disString").innerHTML = screenSum; 
   } 
   
   if (screenEntry !== "-" && /\d$/.test(num) === true) {      
     console.log("Number adds operator to Sum display", currentOperator, "screenSum", screenSum)
     screenSum += currentOperator;
     currentOperator = "";
-    document.getElementById("disString").innerHTML = screenSum; 
+    store.dispatch(displaySumAction(screenSum));
+    //document.getElementById("disString").innerHTML = screenSum; 
   } 
 
   if (maxLength() === false){     
@@ -166,19 +181,23 @@ const numPress = (num) => {
     }
 
     operatorPressed = false; 
-    screenEntry = screenEntry.replace(/\+|\-|\&#247;|\&#215;/g, "");
+    screenEntry = screenEntry.replace(/\+|\-|\÷|\×/g, "");
 
     if (cePressed === false  && num !== "-" ){
       screenEntry += num;
       screenSum += num;
-      displaySet(screenEntry, screenSum);   
+      store.dispatch(displayEntryAction(screenEntry));
+      store.dispatch(displaySumAction(screenSum));   
+     // displaySet(screenEntry, screenSum);   
     }
 
     else if (/\d$/.test(screenSum) !== true && cePressed === true  && num !== "-" ){
       cePressed = false;
       screenEntry += num;
       screenSum += num;
-      displaySet(screenEntry, screenSum);  
+      store.dispatch(displayEntryAction(screenEntry));
+      store.dispatch(displaySumAction(screenSum));   
+   //   displaySet(screenEntry, screenSum);  
     }
   }else{
     clearScreen();
@@ -209,7 +228,8 @@ const operatorPress = (op) => {
 
     if(screenEntry !== "0" && operatorPressed === false  && screenSum !== "0"){
       screenEntry = op; 
-      document.getElementById("display").innerHTML = screenEntry;
+      store.dispatch(displayEntryAction(screenEntry));
+      //document.getElementById("display").innerHTML = screenEntry;
       
       if(op !== "-"){
         currentOperator = op;
@@ -242,13 +262,17 @@ if (maxLength() === false){
   if(screenEntry !== "0"  && operatorPressed === false ){
       screenEntry += zero; 
       screenSum += zero;
-      displaySet(screenEntry, screenSum);   
+      //displaySet(screenEntry, screenSum); 
+      store.dispatch(displayEntryAction(screenEntry));
+      store.dispatch(displaySumAction(screenSum));     
     }
 
     else if(decPointPressed === true){   
       screenEntry += "0";  
       screenSum += "0";
-      displaySet(screenEntry, screenSum);            
+    //  displaySet(screenEntry, screenSum);
+    store.dispatch(displayEntryAction(screenEntry));
+    store.dispatch(displaySumAction(screenSum));               
      }
   }else{
     clearScreen();
@@ -261,28 +285,36 @@ const decPointPress = () => {
       decPointPressed = true;    
       screenEntry += ".";   
       screenSum += ".";
-      displaySet(screenEntry, screenSum);  
+     // displaySet(screenEntry, screenSum); 
+     store.dispatch(displayEntryAction(screenEntry));
+     store.dispatch(displaySumAction(screenSum));    
 
     }else if (decPointPressed === false  && operatorPressed === true  && cePressed === false){
       operatorPressed = false;
       decPointPressed = true;    
       screenEntry = "0.";   
       screenSum += "0.";
-      displaySet(screenEntry, screenSum);    
+   //   displaySet(screenEntry, screenSum);
+      store.dispatch(displayEntryAction(screenEntry));
+      store.dispatch(displaySumAction(screenSum));       
 
     }else if (decPointPressed === false && /\d$/.test(screenSum) !== true && cePressed === true){
       cePressed = false;
       decPointPressed = true;
       screenEntry = "0.";
       screenSum += "0.";
-      displaySet(screenEntry, screenSum);      
+    //  displaySet(screenEntry, screenSum);
+      store.dispatch(displayEntryAction(screenEntry));
+      store.dispatch(displaySumAction(screenSum));         
     
     }else if (decPointPressed === false  && operatorPressed === false  && screenSum ==="0" && cePressed === true){
       cePressed = false;
       decPointPressed = true;
       screenEntry += ".";  
       screenSum += ".";
-      displaySet(screenEntry, screenSum);  
+     // displaySet(screenEntry, screenSum); 
+      store.dispatch(displayEntryAction(screenEntry));
+      store.dispatch(displaySumAction(screenSum));    
     }
   }else{
     clearScreen();
@@ -291,8 +323,9 @@ const decPointPress = () => {
 
 const equalPress = () => {
   if (/\d$/.test(screenSum) === true){
+    let sumToDisplay = screenSum;
     console.log("equalPress screenSum String", screenSum);
-    screenSum = screenSum.replace(/\&#247;/g, "/").replace(/\&#215;/g, "*").replace(/(\/)/g, " $1 ").replace(/(\*)/g, " $1 ").replace(/(\+)/g, " $1 ").replace(/((?!^)\-)/g, " $1 ").split(" ");
+    screenSum = screenSum.replace(/\÷/g, "/").replace(/\×/g, "*").replace(/(\/)/g, " $1 ").replace(/(\*)/g, " $1 ").replace(/(\+)/g, " $1 ").replace(/((?!^)\-)/g, " $1 ").split(" ");
     console.log("equalPress screenSum Array", screenSum);
 
     // Sort Array 
@@ -338,8 +371,11 @@ const equalPress = () => {
     clearScreen();        
       
     }else{
-      document.getElementById("display").innerHTML = calculation;
-      document.getElementById("disString").innerHTML +="="+calculation;  
+      store.dispatch(displayEntryAction(calculation));
+      store.dispatch(displaySumAction(sumToDisplay += "=" + calculation));
+      console.log("array clacuation return, calculation", "screenSum", screenSum, "is array?", Array.isArray(screenSum))
+      //document.getElementById("display").innerHTML = calculation;
+      //document.getElementById("disString").innerHTML +="="+calculation;  
       equalPressed = true;
 
       if (calculation === "0"){
@@ -350,25 +386,33 @@ const equalPress = () => {
   }
 }
 
-const Display = (props) => {
-  /*let [displayscreenEntry,setDisplayscreenEntry] = useState("0");
-  let [displayscreenSum, setDisplayscreenSum] = useState("0");*/
 
+const DisplayEntry = (props) => {
   return (
-    <div id="screen" className="text-right">
+    <>
       <p id="display">{props.entry}</p>
-  <p id="disString">{props.sum}</p>
-    </div>
-    )
+    </>
+  )
 }
+
+const DisplaySum = (props) => {
+  return (
+    <>
+      <p id="disString">{props.sum}</p>
+    </>
+  )
+} 
+
+const ConnectedDisplayEntry = connect(mapStatetoProps, mapDispatchToProps)(DisplayEntry);
+const ConnectedDisplaySum = connect(mapStatetoProps, mapDispatchToProps)(DisplaySum);
 
 const Buttons = () => {
   return (
     <>
       <button onClick={acReset} id="clear">AC</button>
       <button onClick={ceReset} id="CE">CE</button>
-      <button onClick={() => {operatorPress("&#247;")}} id="divide">&#247;</button>
-      <button onClick={() => {operatorPress("&#215;")}} id="multiply">&#215;</button>  
+      <button onClick={() => {operatorPress("÷")}} id="divide">÷</button>
+      <button onClick={() => {operatorPress("×")}} id="multiply">×</button>  
       <button onClick={() => {numPress("7")}} id="seven">7</button>
       <button onClick={() => {numPress("8")}} id="eight">8</button>
       <button onClick={() => {numPress("9")}} id="nine">9</button>
@@ -387,7 +431,9 @@ const Buttons = () => {
   )
 }
 
-const ConnectedDisplay = connect(mapStatetoProps, mapDispatchToProps)(Display);
+//const ConnectedDisplay = connect(mapStatetoProps, mapDispatchToProps)(Display);
+
+
 
 const App = () =>{ 
   return (
@@ -395,7 +441,10 @@ const App = () =>{
       <div id="calcBase" className= "container">   
         <div id="padDiv">
           <h1 className="text-center">CALCULATOR</h1>
-          <ConnectedDisplay/>
+          <div id="screen" className="text-right">
+            <ConnectedDisplayEntry/>
+            <ConnectedDisplaySum/>
+          </div>
           <Buttons/>
         </div>          
       </div>]
@@ -404,3 +453,5 @@ const App = () =>{
 }
 
 export default App;
+
+// <ConnectedDisplay/>
