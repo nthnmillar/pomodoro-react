@@ -1,6 +1,6 @@
 import React from 'react';
+import { Provider, connect } from 'react-redux';
 import 'bootstrap';
-
 
 const BreakLength = () => {
   return (
@@ -45,6 +45,17 @@ const Time = () => {
     )
 }
 
+const Reset = () => {
+  return (
+    <>
+      <button id="reset" onClick="" className="text-center">
+        RESET       
+      </button>  
+    </>
+    )
+
+}
+
 const PieButton = () => {
   return (
     <>
@@ -57,6 +68,7 @@ const PieButton = () => {
 
 const App = () =>{ 
   return (
+   // <Provider store={store}>
       <div className= "container">   
         <h1 className="text-center">Pomodoro Clock</h1>
           <div className= "text-center" id="options">
@@ -69,7 +81,9 @@ const App = () =>{
             <Time/>
           </div> 
           <PieButton/>
+          <Reset/>
       </div>
+  //  </Provider>
     )
 }
 

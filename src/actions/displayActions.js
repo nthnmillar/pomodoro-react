@@ -1,3 +1,17 @@
+//Reset
+
+//Start
+
+//Stop
+
+//Break inc
+
+//break dec
+
+//session inc
+
+//session dec
+
 export function displayEntryAction(entry){
   return {
   type: 'DISPLAY_ENTRY',
