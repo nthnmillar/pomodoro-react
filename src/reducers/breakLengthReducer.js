@@ -1,5 +1,5 @@
 
-const breakLengthReducer = (state = {breakLength:"0"}, action) =>{ 
+const breakLengthReducer = (state = {breakLength:1}, action) =>{ 
     if (action.type === 'BREAK_LENGTH'){
       return {breakLength: action.payload};
     }

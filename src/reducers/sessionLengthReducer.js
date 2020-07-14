@@ -1,5 +1,5 @@
 
-const sessionLengthReducer = (state = {sessionLength:"0"}, action) =>{ 
+const sessionLengthReducer = (state = {sessionLength:1}, action) =>{ 
     if (action.type === 'SESSION_LENGTH'){
       return {sessionLength: action.payload};
     }
