@@ -1,33 +1,102 @@
 import React from 'react';
 import { Provider, connect } from 'react-redux';
 import 'bootstrap';
+import store from "./store";
+import { breakLengthAction, sessionLengthAction, timerTitleAction, timerTimeAction, timerClockAction} from "./actions/displayActions";
 
-const BreakLength = () => {
+/*
+// mapStatetoProps
+const mapStatetoProps = (state => {
+  return {
+    entry:state.mathEntry.entry,
+    sum:state.mathSum.sum,
+  };
+});
+
+// mapDispatchToProps
+const mapDispatchToProps = dispatch => ({
+    displayEntry: () => dispatch(displayEntryAction()),
+    displaySum: () => dispatch(displaySumAction()),
+});
+*/
+
+const mapStateToProps = (state => {
+  return {
+    breakLength:state.rootBreakLength.breakLength,
+    sessionLength:state.rootSessionLength.sessionLength,
+    timerTitle: state.rootTimerTitle.timerTitle,
+    timerTime: state.rootTimerTime.timerTime,
+    timerClock: state.rootTimerClock.timerClock
+  };
+})
+
+const mapDispatchToProps = dispatch => ({
+    DisplayBreakLength: () => dispatch(breakLengthAction()),
+    DisplaySessionLength: () => dispatch(sessionLengthAction()),
+    DisplayTimerTitle: () => dispatch(timerTitleAction()),
+    DisplayTimerTime: () => dispatch(timerTimeAction()),
+    DisplayTimerClock: () => dispatch(timerClockAction())
+});
+
+/*
+const ConnectedDisplayEntry = connect(mapStatetoProps, mapDispatchToProps)(DisplayEntry);
+const ConnectedDisplaySum = connect(mapStatetoProps, mapDispatchToProps)(DisplaySum);
+
+const DisplayEntry = (props) => {
+  return (
+    <>
+      <p dangerouslySetInnerHTML={{ __html:props.entry}} id="display"></p>
+    </>
+  )
+}
+
+const DisplaySum = (props) => {
+  return (
+    <>
+      <p dangerouslySetInnerHTML={{ __html:props.sum}} id="disString"></p>
+    </>
+  )
+}
+*/
+//<p dangerouslySetInnerHTML={{ __html:props.sessionLength}} id="break-length"/>
+
+
+
+
+const BreakLength = (props) => {
   return (
     <div className = "choiceDiv text-center">
       <h2 id ="break-label">BREAK LENGTH</h2>
       <div className = "selectDiv">
-        <button onClick="" id ="break-decrement">-</button>
-        <p id="break-length"/>
-        <button onClick="" id ="break-increment">+</button>
+        <button /*onClick=""*/ id ="break-decrement">-</button>
+        {console.log("props.breakLength",props.breakLength)}
+        <p dangerouslySetInnerHTML={{ __html:props.breakLength}} id="break-length"></p>
+        <button /* onClick="" */ id ="break-increment">+</button>
       </div>    
     </div> 
   )
 }
 
+const ConnectedBreakLength = connect(mapStateToProps, mapDispatchToProps)(BreakLength);
+//store.dispatch(breakLengthAction("10"));
 
-const SessionLength = () => {
+
+const SessionLength = (props) => {
   return (
     <div className = "choiceDiv text-center">
       <h2 id ="session-label">SESSION LENGTH</h2>
       <div className = "selectDiv">
-        <button onClick="" id ="session-decrement">-</button>
-        <p id="break-length"/>
-        <button onClick="" id ="session-increment">+</button>
+        <button /* onClick="" */ id ="session-decrement">-</button>
+        <p dangerouslySetInnerHTML={{ __html:props.sessionLength}} id="session-length"/>
+        <button /* onClick="" */ id ="session-increment">+</button>
       </div>    
     </div> 
   )
 }
+
+const ConnectedSessionLength = connect(mapStateToProps, mapDispatchToProps)(SessionLength);
+
+
 
 const TimeLabel = () => {
   return (
@@ -37,6 +106,10 @@ const TimeLabel = () => {
   )
 }
 
+const ConnectedTimeLabel = connect(mapStateToProps, mapDispatchToProps)(TimeLabel);
+
+
+
 const Time = () => {
   return (
     <>
@@ -45,22 +118,25 @@ const Time = () => {
     )
 }
 
-const Reset = () => {
-  return (
-    <>
-      <button id="reset" onClick="" className="text-center">
-        RESET       
-      </button>  
-    </>
-    )
-
-}
+const ConnectedTime = connect(mapStateToProps, mapDispatchToProps)(Time);
 
 const PieButton = () => {
   return (
     <>
-      <button id="start_stop" onClick="">
+      <button id="start_stop" /* onClick="" */>
         <div className="pie degree"/>       
+      </button>  
+    </>
+    )
+}
+
+const ConnectedPieButton = connect(mapStateToProps, mapDispatchToProps)(PieButton);
+
+const Reset = () => {
+  return (
+    <>
+      <button id="reset" /* onClick="" */ className="text-center">
+        RESET       
       </button>  
     </>
     )
@@ -68,22 +144,22 @@ const PieButton = () => {
 
 const App = () =>{ 
   return (
-   // <Provider store={store}>
+    <Provider store={store}>
       <div className= "container">   
         <h1 className="text-center">Pomodoro Clock</h1>
           <div className= "text-center" id="options">
-            <BreakLength/>
-            <SessionLength/>
+            <ConnectedBreakLength/>
+            <ConnectedSessionLength/>
           </div>
           <div className= "text-center">
-            <TimeLabel/>
+            <ConnectedTimeLabel/>
             <br/>
-            <Time/>
+            <ConnectedTime/>
           </div> 
-          <PieButton/>
+          <ConnectedPieButton/>
           <Reset/>
       </div>
-  //  </Provider>
+    </Provider>
     )
 }
 
