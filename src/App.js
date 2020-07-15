@@ -3,7 +3,7 @@ import { Provider, connect } from 'react-redux';
 import 'bootstrap';
 import store from "./store";
 import { breakLengthAction, sessionLengthAction, timerTitleAction, timerTimeAction,/* timerClockAction,*/ timerClockColAction, timerClockImgAction} from "./actions/displayActions";
-import { breakLess, pauBreakLess, breakMore, pauBreakMore, sessionLess, pauSessLess, sessionMore, pauSessMore, countStart, pauseTime } from "./clock";
+import { breakLess, pauBreakLess, breakMore, pauBreakMore, sessionLess, pauSessLess, sessionMore, pauSessMore, countStart, pauseTime, resetTimer } from "./clock";
 
 const mapStateToProps = (state => {
   return {
@@ -84,10 +84,6 @@ const PieButton = (props) => {
   return (
     <>
       <button id="start_stop"  onClick = {() =>{countStart(); pauseTime()}} >
-        {console.log("pie button Col",props.timerClockCol, "pie button Img",props.timerClockImg)}
-        {/* console.log("timerClockColAction",timerClockColAction.payload) */}
-        {/* console.log("breakLength",props.breakLength)*/}
-        {/* console.log("rprops",props) */}
         <div style={{backgroundColor: props.timerClockCol, backgroundImage: props.timerClockImg , borderColor: props.timerClockCol  }}  className="pie degree"/>       
       </button>  
     </>
@@ -100,7 +96,7 @@ const ConnectedPieButton = connect(mapStateToProps, mapDispatchToProps)(PieButto
 const Reset = () => {
   return (
     <>
-      <button id="reset" /* onClick="" */ className="text-center">
+      <button id="reset" onClick={resetTimer} className="text-center">
         RESET       
       </button>  
     </>

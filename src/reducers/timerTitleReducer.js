@@ -1,5 +1,5 @@
 
-const timerTitleReducer = (state = {timerTitle:"0"}, action) =>{ 
+const timerTitleReducer = (state = {timerTitle:"SESSION"}, action) =>{ 
     if (action.type === 'TIMER_TITLE'){
       return {timerTitle: action.payload};
     }

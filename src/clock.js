@@ -29,6 +29,8 @@ function defStart(){
 }
 */
 
+//timeload(val * 60 * 1000)
+
 const breakLengthDispatch = (breakLength) => {
     store.dispatch(breakLengthAction(breakLength));
 }
@@ -64,7 +66,7 @@ export function breakLess(){
     // document.getElementById("breakTime").innerHTML= breakL;
     if(curr == "BREAK"){
         timerTitleDispatch(curr);
-        timerTimeDispatch(breakL);
+        timeLoad(breakL * 60 * 1000);
       // document.getElementById("current").innerHTML= curr;
       // document.getElementById("time").innerHTML= breakL;     
     }       
@@ -80,7 +82,7 @@ export function pauBreakLess(){
       // document.getElementById("breakTime").innerHTML= breakL;   
   }  
   if (curr == "BREAK"){
-    timerTimeDispatch(breakL)
+    timeLoad(breakL * 60 * 1000);
    //  document.getElementById("time").innerHTML= breakL;
   }
   console.log("pauBreakLess");
@@ -93,7 +95,7 @@ export function breakMore(){
     // document.getElementById("breakTime").innerHTML= breakL;
     if(curr == "BREAK"){
         timerTitleDispatch(curr);
-        timerTimeDispatch(breakL);
+        timeLoad(breakL * 60 * 1000);
       // document.getElementById("current").innerHTML= curr;
       // document.getElementById("time").innerHTML= breakL;      
     }
@@ -108,7 +110,7 @@ export function pauBreakMore(){
       breakLengthDispatch(breakL);
       // document.getElementById("breakTime").innerHTML= breakL; 
       if (curr == "BREAK"){
-        timerTimeDispatch(breakL);
+        timeLoad(breakL * 60 * 1000);
         // document.getElementById("time").innerHTML= breakL;
       }
     }
@@ -122,7 +124,7 @@ export function sessionLess(){
     // document.getElementById("sessionTime").innerHTML= sessL;
     if(curr == "SESSION"){
         timerTitleDispatch(curr);
-        timerTimeDispatch(sessL);
+        timeLoad(sessL * 60 * 1000);
         // document.getElementById("current").innerHTML= curr;
         // document.getElementById("time").innerHTML= sessL;      
     }
@@ -136,7 +138,7 @@ export function pauSessLess(){
       sessionLengthDispatch(sessL);
       // document.getElementById("sessionTime").innerHTML= sessL;   
       if (curr == "SESSION"){
-          timerTimeDispatch(sessL);
+          timeLoad(sessL * 60 * 1000);
         // document.getElementById("time").innerHTML= sessL;
       }
     }  
@@ -150,7 +152,7 @@ export function sessionMore(){
     if(curr == "SESSION"){
         timerTitleDispatch(curr);
       // document.getElementById("current").innerHTML= curr;
-        timerTimeDispatch(sessL);
+        timeLoad(sessL * 60 * 1000);
       // document.getElementById("time").innerHTML= sessL;      
     }
   }
@@ -163,7 +165,7 @@ export function pauSessMore(){
         sessionLengthDispatch(sessL);
       // document.getElementById("sessionTime").innerHTML= sessL; 
        if (curr == "SESSION"){
-        timerTimeDispatch(sessL);
+        timeLoad(sessL * 60 * 1000);
         // document.getElementById("time").innerHTML= sessL;
        }
     }
@@ -171,9 +173,10 @@ export function pauSessMore(){
 
 //Converts time to hours, minutes and seconds and inserts it into the html
 function timeLoad(inp){
-  var hours = Math.floor((inp % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((inp % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((inp % (1000 * 60)) / 1000);  
+  console.log("timeload inp",inp)
+  let hours = Math.floor((inp % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((inp % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((inp % (1000 * 60)) / 1000);  
   //Adds '0' if minutes or seconds below 1
   if(minutes < 10){
     minutes = '0' + minutes;
@@ -227,7 +230,33 @@ function reset(per){
       totaltime = per * 60;
       countD= per * 60 * 1000;    
       count = 0;
-      timeLoad(countD);
+      timeLoad(countD);     
+}
+
+export function resetTimer(){
+  breakL = 5;
+  breakLengthDispatch(breakL);
+  sessL = 25;
+  sessionLengthDispatch(sessL);
+  curr = "SESSION"
+  timerTitleDispatch(curr)
+  counting = false;
+  pause = false;
+  breakClicked = false;
+  sessClicked = false;
+  count = 0;
+  counting = false;
+  pause = false;
+  breakClicked = false;
+  sessClicked = false;
+  countOn = false;
+  clearTimeout(myCounter);
+  timerTimeDispatch("0:25:00");
+  col = 'green';
+  timerClockImgDispatch('linear-gradient(90deg, transparent 50%, rgb(25, 30, 32) 50%), linear-gradient(90deg, rgb(25, 30, 32) 50%, transparent 50%)');
+  timerClockColDispatch(col);
+  sessOn = false;   
+ // countEnd();
 }
 
 //Starts the counter if its is not already counting
