@@ -1,5 +1,5 @@
 
-const timerTimeReducer = (state = {timerTime:"0:25:00"}, action) =>{ 
+const timerTimeReducer = (state = {timerTime:"25:00"}, action) =>{ 
     if (action.type === 'TIMER_TIME'){
       return {timerTime: action.payload};
     }

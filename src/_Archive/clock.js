@@ -65,8 +65,8 @@ export function breakLess(){
     breakLengthDispatch(breakL);
     // document.getElementById("breakTime").innerHTML= breakL;
     if(curr == "BREAK"){
-        timerTitleDispatch(curr);
         timeLoad(breakL * 60 * 1000);
+        timerTitleDispatch(curr);
       // document.getElementById("current").innerHTML= curr;
       // document.getElementById("time").innerHTML= breakL;     
     }       
@@ -89,13 +89,13 @@ export function pauBreakLess(){
 }
 //Break length becomes more when its button is pressed at the beggining
 export function breakMore(){
-  if(breakL < 740 && countOn == false || counting == false && countOn == true){
+  if(breakL < 60 && countOn == false || counting == false && countOn == true){
     breakL++;
     breakLengthDispatch(breakL)
     // document.getElementById("breakTime").innerHTML= breakL;
     if(curr == "BREAK"){
-        timerTitleDispatch(curr);
         timeLoad(breakL * 60 * 1000);
+        timerTitleDispatch(curr);
       // document.getElementById("current").innerHTML= curr;
       // document.getElementById("time").innerHTML= breakL;      
     }
@@ -105,7 +105,7 @@ export function breakMore(){
 //Break length becomes more when its button is pressed during a pause
 export function pauBreakMore(){
     breakClicked = true;
-    if(breakL < 740 && countOn == true && pause == true){   
+    if(breakL < 60 && countOn == true && pause == true){   
       breakL++;
       breakLengthDispatch(breakL);
       // document.getElementById("breakTime").innerHTML= breakL; 
@@ -123,8 +123,8 @@ export function sessionLess(){
     sessionLengthDispatch(sessL);
     // document.getElementById("sessionTime").innerHTML= sessL;
     if(curr == "SESSION"){
-        timerTitleDispatch(curr);
         timeLoad(sessL * 60 * 1000);
+        timerTitleDispatch(curr);
         // document.getElementById("current").innerHTML= curr;
         // document.getElementById("time").innerHTML= sessL;      
     }
@@ -145,14 +145,14 @@ export function pauSessLess(){
 }
 //Session length becomes more when its button is pressed at the beggining
 export function sessionMore(){
-  if(sessL < 740 && countOn == false){
+  if(sessL < 60 && countOn == false){
     sessL++;
     sessionLengthDispatch(sessL);
     // document.getElementById("sessionTime").innerHTML= sessL;
     if(curr == "SESSION"){
-        timerTitleDispatch(curr);
       // document.getElementById("current").innerHTML= curr;
         timeLoad(sessL * 60 * 1000);
+        timerTitleDispatch(curr);
       // document.getElementById("time").innerHTML= sessL;      
     }
   }
@@ -160,12 +160,13 @@ export function sessionMore(){
 //Session length becomes more when its button is pressed during a pause
 export function pauSessMore(){
       sessClicked = true;
-    if(sessL < 740 && countOn == true && pause == true){   
+    if(sessL < 60 && countOn == true && pause == true){   
       sessL++;
-        sessionLengthDispatch(sessL);
+ 
       // document.getElementById("sessionTime").innerHTML= sessL; 
        if (curr == "SESSION"){
         timeLoad(sessL * 60 * 1000);
+        sessionLengthDispatch(sessL);
         // document.getElementById("time").innerHTML= sessL;
        }
     }
@@ -185,7 +186,13 @@ function timeLoad(inp){
     seconds = '0'+ seconds;
   }
   //Inserts time into html
-    timerTimeDispatch(hours + ':' + minutes + ':' + seconds);  
+
+  if (hours > 0){  
+    timerTimeDispatch(hours + ':' + minutes + ':' + seconds); 
+  }else{
+    timerTimeDispatch(minutes + ':' + seconds); 
+  } 
+ 
   // document.getElementById("time").innerHTML= hours + ':' + minutes + ':' + seconds;
 }
 
@@ -251,7 +258,7 @@ export function resetTimer(){
   sessClicked = false;
   countOn = false;
   clearTimeout(myCounter);
-  timerTimeDispatch("0:25:00");
+  timerTimeDispatch("25:00");
   col = 'green';
   timerClockImgDispatch('linear-gradient(90deg, transparent 50%, rgb(25, 30, 32) 50%), linear-gradient(90deg, rgb(25, 30, 32) 50%, transparent 50%)');
   timerClockColDispatch(col);
@@ -295,19 +302,19 @@ function update(percent){
         counting = true;
         //First half of pie timer
         var deg;    
-        if(percent<(totaltime/2)){
-          deg = 90 + (360*percent/totaltime);
+ //       if(percent<(totaltime/2)){
+ //         deg = 90 + (360*percent/totaltime);
         
-          timerClockImgDispatch('linear-gradient('+deg+'deg, transparent 50%, #191e20 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
-          timerClockColDispatch(col);
+ //         timerClockImgDispatch('linear-gradient('+deg+'deg, transparent 50%, #191e20 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
+ //         timerClockColDispatch(col);
           //$('.pie').css('background-image', 'linear-gradient('+deg+'deg, transparent 50%, #191e20 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
           //$(".pie").css({'background-color': col, 'border-color': col});              
         //Second half of pie timer         
-        }else if(percent>=(totaltime/2)){
-          deg = -90 + (360*percent/totaltime);
-          timerClockImgDispatch('linear-gradient('+deg+'deg, transparent 50%, '+ col +' 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
+ //       }else if(percent>=(totaltime/2)){
+  //        deg = -90 + (360*percent/totaltime);
+ //         timerClockImgDispatch('linear-gradient('+deg+'deg, transparent 50%, '+ col +' 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
          // $('.pie').css('background-image', 'linear-gradient('+deg+'deg, transparent 50%, '+ col +' 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
-         }
+ //        }
 }
 
 //The time counter
@@ -329,6 +336,39 @@ function counter(){
     }
   }, 1000);
 }
+
+/* ACCURATE TIME
+var origin = new Date().getTime();
+
+function accuTime(timer, max, repeatArgument, callbackArgument){
+  var counter = 1;
+
+  var init = (t) => {
+    let timeStart = new Date().getTime();
+    setTimeout(function () {
+      if (counter < max) {
+        let fix = (new Date().getTime() - timeStart) - timer;
+        init(t - fix);
+        counter++;
+      
+      // event to be repeated max times
+        repeatArgument();
+        
+      } else {
+      // event to be executed at animation end
+        callbackArgument();
+      }
+    }, t);
+  }
+init(timer);
+}
+*/
+
+//example
+//accuTime(100, 20,function test(){console.log(new Date().getTime())},function test2(){console.log(new Date().getTime() - origin);});
+
+
+
 
 function countEnd(){
     count = 0;
