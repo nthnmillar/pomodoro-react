@@ -30,6 +30,7 @@ export function timerTimeAction(timerTime){
   };
 }
 
+/*
 //displayTimerClock
 export function timerClockAction(timerClock){
   return {
@@ -37,6 +38,22 @@ export function timerClockAction(timerClock){
     payload: timerClock
   };
 }
+*/
+
+export function timerClockColAction(timerClockCol){
+  return {
+    type: 'TIMER_CLOCK_COL',
+    payload: timerClockCol
+  };
+}
+
+export function timerClockImgAction(timerClockImg){
+  return {
+    type: 'TIMER_CLOCK_IMG',
+    payload: timerClockImg
+  };
+}
+
 
 
 /*

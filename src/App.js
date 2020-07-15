@@ -2,7 +2,7 @@ import React from 'react';
 import { Provider, connect } from 'react-redux';
 import 'bootstrap';
 import store from "./store";
-import { breakLengthAction, sessionLengthAction, timerTitleAction, timerTimeAction, timerClockAction} from "./actions/displayActions";
+import { breakLengthAction, sessionLengthAction, timerTitleAction, timerTimeAction,/* timerClockAction,*/ timerClockColAction, timerClockImgAction} from "./actions/displayActions";
 import { breakLess, pauBreakLess, breakMore, pauBreakMore, sessionLess, pauSessLess, sessionMore, pauSessMore, countStart, pauseTime } from "./clock";
 
 const mapStateToProps = (state => {
@@ -11,7 +11,9 @@ const mapStateToProps = (state => {
     sessionLength:state.rootSessionLength.sessionLength,
     timerTitle: state.rootTimerTitle.timerTitle,
     timerTime: state.rootTimerTime.timerTime,
-    timerClock: state.rootTimerClock.timerClock
+   /* timerClock: state.rootTimerClock.timerClock, */
+    timerClockCol: state.rootTimerClockCol.timerClockCol,
+    timerClockImg: state.rootTimerClockImg.timerClockImg
   };
 })
 
@@ -20,7 +22,9 @@ const mapDispatchToProps = dispatch => ({
     DisplaySessionLength: () => dispatch(sessionLengthAction()),
     DisplayTimerTitle: () => dispatch(timerTitleAction()),
     DisplayTimerTime: () => dispatch(timerTimeAction()),
-    DisplayTimerClock: () => dispatch(timerClockAction())
+    /*DisplayTimerClock: () => dispatch(timerClockAction()),*/
+    DisplayTimerClockCol: () => dispatch(timerClockColAction()),
+    DisplayTimerClockImg: () => dispatch(timerClockImgAction())
 });
 
 const BreakLength = (props) => {
@@ -76,16 +80,22 @@ const Time = (props) => {
 const ConnectedTime = connect(mapStateToProps, mapDispatchToProps)(Time);
 
 const PieButton = (props) => {
+
   return (
     <>
       <button id="start_stop"  onClick = {() =>{countStart(); pauseTime()}} >
-        <div /* dangerouslySetInnerHTML={{__html:props.timerClock}} */ className="pie degree"/>       
+        {console.log("pie button Col",props.timerClockCol, "pie button Img",props.timerClockImg)}
+        {/* console.log("timerClockColAction",timerClockColAction.payload) */}
+        {/* console.log("breakLength",props.breakLength)*/}
+        {/* console.log("rprops",props) */}
+        <div style={{backgroundColor: props.timerClockCol, backgroundImage: props.timerClockImg , borderColor: props.timerClockCol  }}  className="pie degree"/>       
       </button>  
     </>
     )
 }
 
 const ConnectedPieButton = connect(mapStateToProps, mapDispatchToProps)(PieButton);
+
 
 const Reset = () => {
   return (

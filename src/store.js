@@ -1,9 +1,12 @@
 import { createStore, combineReducers} from 'redux';
 import breakLengthReducer from "./reducers/breakLengthReducer";
 import sessionLengthReducer from "./reducers/sessionLengthReducer";
-import timerClockReducer from "./reducers/timerClockReducer";
-import timerTimeReducer from "./reducers/timerTimeReducer";
 import timerTitleReducer  from "./reducers/timerTitleReducer";
+import timerTimeReducer from "./reducers/timerTimeReducer";
+//import timerClockReducer from "./reducers/timerClockColReducer";
+import timerClockColReducer from "./reducers/timerClockColReducer";
+import timerClockImgReducer from "./reducers/timerClockImgReducer";
+
 
 
 const rootReducer = combineReducers({
@@ -11,7 +14,9 @@ const rootReducer = combineReducers({
     rootSessionLength: sessionLengthReducer,
     rootTimerTitle: timerTitleReducer,
     rootTimerTime: timerTimeReducer,
-    rootTimerClock: timerClockReducer
+  //  rootTimerClock: timerClockReducer,
+    rootTimerClockCol: timerClockColReducer,
+    rootTimerClockImg: timerClockImgReducer
   });
 
 export default createStore(

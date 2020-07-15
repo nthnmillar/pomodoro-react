@@ -1,7 +1,6 @@
 import store from "./store";
-import { breakLengthAction, sessionLengthAction, timerTitleAction, timerTimeAction, timerClockAction} from "./actions/displayActions";
+import { breakLengthAction, sessionLengthAction, timerTitleAction, timerTimeAction, /* timerClockAction, */ timerClockColAction, timerClockImgAction} from "./actions/displayActions";
 import {$,jQuery} from 'jquery';
-// export for others scripts to use
 window.$ = $;
 window.jQuery = jQuery;
 
@@ -42,9 +41,19 @@ const timerTitleDispatch = (timerTitle) => {
 const timerTimeDispatch = (timerTime) => {
     store.dispatch(timerTimeAction(timerTime));
 }
+/*
 const timerClockDispatch = (timerClock) => {
-    store.dispatch(timerClockAction(timerClock))
+    store.dispatch(timerClockAction(timerClock));
 }
+*/
+const timerClockColDispatch = (timerClockCol) => {
+  store.dispatch(timerClockColAction(timerClockCol));
+}
+const timerClockImgDispatch = (timerClockImg) => {
+  store.dispatch(timerClockImgAction(timerClockImg));
+}
+
+
 
 
 //Break length becomes less when its button is pressed at the beggining
@@ -259,12 +268,16 @@ function update(percent){
         var deg;    
         if(percent<(totaltime/2)){
           deg = 90 + (360*percent/totaltime);
-          $('.pie').css('background-image', 'linear-gradient('+deg+'deg, transparent 50%, #2C3539 50%),linear-gradient(90deg, #2C3539 50%, transparent 50%)');
-          $(".pie").css({'background-color': col, 'border-color': col});              
+        
+          timerClockImgDispatch('linear-gradient('+deg+'deg, transparent 50%, #191e20 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
+          timerClockColDispatch(col);
+          //$('.pie').css('background-image', 'linear-gradient('+deg+'deg, transparent 50%, #191e20 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
+          //$(".pie").css({'background-color': col, 'border-color': col});              
         //Second half of pie timer         
         }else if(percent>=(totaltime/2)){
           deg = -90 + (360*percent/totaltime);
-          $('.pie').css('background-image', 'linear-gradient('+deg+'deg, transparent 50%, '+ col +' 50%),linear-gradient(90deg, #2C3539 50%, transparent 50%)');
+          timerClockImgDispatch('linear-gradient('+deg+'deg, transparent 50%, '+ col +' 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
+         // $('.pie').css('background-image', 'linear-gradient('+deg+'deg, transparent 50%, '+ col +' 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
          }
 }
 
