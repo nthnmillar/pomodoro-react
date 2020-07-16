@@ -1,5 +1,9 @@
 import React, {useState, useEffect, userRef} from 'react';
 import 'bootstrap';
+import gong from './Metal_Gong-Dianakc-109711828.wav';
+
+let count = 25 * 60;
+let timer = "Session";
 
 
 const App = (props) => { 
@@ -7,9 +11,9 @@ const App = (props) => {
   const [sessionCount, setSessionCount] = useState(25);
   const [period, setPeriod] = useState(undefined); 
   const [playOn, setPlayOn] = useState(false);
-  let count = 25 * 60;
+  
   const [clockCount, setClockCount] = useState(count);
-  let timer = "Session";
+ 
   const [currentTimer, setCurrentTimer] = useState(timer);
 
 
@@ -29,10 +33,12 @@ const App = (props) => {
         
         console.log(clockCount,"clock Count setInterval");
         if (count === 0 && timer === "Session" ){
+          document.getElementById("beep").play();
           timer = "Break";
           setCurrentTimer(timer);
           count = breakCount * 60;
         } else if (count === 0 && timer === "Break"){
+          document.getElementById("beep").play();
           timer = "Session";
           setCurrentTimer(timer);
           count = sessionCount * 60;
@@ -52,10 +58,10 @@ const App = (props) => {
   */
 
   const handleReset = () => {
-    setBreakCount(5);
-    setSessionCount(25);
+    setBreakCount(1);
+    setSessionCount(1);
     setPlayOn(false);
-    count = 25 * 60;
+    count = 1;
     setClockCount(count);
     timer = "Session";
     setCurrentTimer(timer);
@@ -64,18 +70,42 @@ const App = (props) => {
 
   console.log(clockCount,"clock Count App",period, period);
 
+  const handleBreakDec = () => { 
+    if (breakCount > 1){
+      setBreakCount(breakCount - 1);
+    }
+  };
+  
+  const handleBreakInc = () => { 
+    if (breakCount < 60){
+      setBreakCount(breakCount + 1);
+    }
+  };
+
+  const handleSessionDec = () => { 
+    if (sessionCount > 1){
+      setSessionCount(sessionCount - 1);
+    }
+  };
+
+  const handleSessionInc = () => { 
+    if (sessionCount < 60){
+      setSessionCount(sessionCount + 1);
+    }
+  };
+
   const breakProps = {
     title: 'Break Length',
     count: breakCount,
-  //  handleDec: this.handleBreakDec,
- //   handleInc: this.handleBreakInc
+    handleDec: handleBreakDec,
+    handleInc: handleBreakInc
   }
 
   const sessionProps = {
     title: 'Session Length',
     count: sessionCount,
-  //  handleDec: this.handleSessionDec,
-  //  handleInc: this.handleSessionInc
+    handleDec: handleSessionDec,
+    handleInc: handleSessionInc
   }
 
   const timeLoad = (inp) =>{
@@ -86,7 +116,6 @@ const App = (props) => {
     seconds = seconds< 0 ? ('0' + seconds) : seconds;
     return minutes + ":" + seconds;
     */
-
     inp = inp * 1000
     let hours = Math.floor((inp % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((inp % (1000 * 60 * 60)) / (1000 * 60));
@@ -103,9 +132,9 @@ const App = (props) => {
     }else{
       return minutes + ':' + seconds; 
     } 
-
   }
 
+  /*
   const handleDec = () => {
     if(!playOn){
       
@@ -117,6 +146,7 @@ const App = (props) => {
       
     }
   }
+  */
 
   return (
       <div className= "container">   
@@ -124,6 +154,9 @@ const App = (props) => {
           <div className= "text-center" id="options">
             <TimerSettings {...breakProps}/>
             <TimerSettings {...sessionProps}/>
+
+            <audio id="beep" preload="auto" src={gong}/>
+
           </div>
           <div className= "text-center">
             <span id="timer-label">{currentTimer}</span>  
