@@ -3,12 +3,11 @@ import 'bootstrap';
 
 
 const App = (props) => { 
-  const [breakCount, setBreakCount] = useState(1);
+  const [breakCount, setBreakCount] = useState(5);
   const [sessionCount, setSessionCount] = useState(25);
-
   const [period, setPeriod] = useState(undefined); 
   const [playOn, setPlayOn] = useState(false);
-  let count = 1;
+  let count = 25 * 60;
   const [clockCount, setClockCount] = useState(count);
   let timer = "Session";
   const [currentTimer, setCurrentTimer] = useState(timer);
@@ -42,7 +41,8 @@ const App = (props) => {
       }, 1000))
     }else{
       setPlayOn(false);
-      setPeriod(clearInterval(period));  
+      setPeriod(clearInterval(period));
+      setPeriod(undefined);  
     }
   }
   /*
@@ -50,6 +50,17 @@ const App = (props) => {
 
   },[]);
   */
+
+  const handleReset = () => {
+    setBreakCount(5);
+    setSessionCount(25);
+    setPlayOn(false);
+    count = 25 * 60;
+    setClockCount(count);
+    timer = "Session";
+    setCurrentTimer(timer);
+    setPeriod(clearInterval(period));
+  }
 
   console.log(clockCount,"clock Count App",period, period);
 
@@ -122,7 +133,7 @@ const App = (props) => {
           <button id="start_stop" onClick={handleStartStop} >
             <div /* style={{backgroundColor: props.timerClockCol, backgroundImage: props.timerClockImg , borderColor: props.timerClockCol  }} */ className="pie degree"/>       
           </button>  
-          <button id="reset"   onClick={props.handleReset} className="text-center">
+          <button id="reset"   onClick={handleReset} className="text-center">
           RESET       
         </button> 
       </div>
