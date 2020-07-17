@@ -39,10 +39,13 @@ const App = (props) => {
       setPeriod(setInterval(() => {
               
         if(count === 0){
-          timer = (timer === "Session") ? "Break" : "Session";
           count = (timer === "Session") ? (breakCount * 60) : (sessionCount * 60);
+          timer = (timer === "Session") ? "Break" : "Session";
+
+          setClockCount(count);  
           setCurrentTimer(timer);
-          setClockCount(count);       
+
+
           document.getElementById("beep").play();
           console.log("setInterval","timer", timer, "count", count)
         
