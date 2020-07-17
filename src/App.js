@@ -132,3 +132,6 @@ const TimerSettings = (props) => {
 }
 
 export default App;
+
+// Information from Florin Pop's video assisted with development, however, this code was written with react functional components using hooks instead of class components.
+// https://www.youtube.com/watch?v=5rz6XbrCqt0
