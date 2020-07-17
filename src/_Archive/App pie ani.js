@@ -1,17 +1,41 @@
 import React, {useState} from 'react';
 import 'bootstrap';
 import gong from './Metal_Gong-Dianakc-109711828.wav';
+import { prettyDOM } from '@testing-library/react';
 
 let count = 25 * 60;
 let timer = "Session";
 
-const App = () => { 
+const App = (props) => { 
   const [breakCount, setBreakCount] = useState(5);
   const [sessionCount, setSessionCount] = useState(25);
   const [period, setPeriod] = useState(undefined); 
   const [playOn, setPlayOn] = useState(false); 
   const [clockCount, setClockCount] = useState(count);
   const [currentTimer, setCurrentTimer] = useState(timer);
+  const [totalTime, setTotaltime] = useState(count);
+  const [clockImg, setClockImg] = useState("");
+  const [color, setColor] = useState("green");
+
+
+  //Animated timer    
+const update = (percent) => {
+  console.log("totalTime", totalTime, "percent", percent)
+  let deg;    
+  if(percent<(totalTime/2)){
+    deg = 90 + (360*percent/totalTime);
+    setClockImg('linear-gradient('+deg+'deg, transparent 50%, #191e20 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
+    (timer = "Session") ? setColor("yellow") : setColor("green");
+
+    console.log("Pie Ani")
+
+  }else if(percent>=(totalTime/2)){
+    deg = -90 + (360*percent/totalTime);
+    setClockImg('linear-gradient('+deg+'deg, transparent 50%, '+ color +' 50%),linear-gradient(90deg, #191e20 50%, transparent 50%)');
+  }
+}
+
+
 
   const handleStartStop = () => {
     if (playOn){
@@ -19,16 +43,25 @@ const App = () => {
       setPeriod(clearInterval(period));
     }else if(!playOn){
       setPlayOn(true);
-      setPeriod(setInterval(() => {      
+      setPeriod(setInterval(() => {
+      setTotaltime(count);
+      console.log(totalTime);        
         if(count === 0){
+          update(0);
           count = (timer === "Session") ? (breakCount * 60) : (sessionCount * 60);
           timer = (timer === "Session") ? "Break" : "Session";
           setClockCount(count);  
           setCurrentTimer(timer);
-          document.getElementById("beep").play();               
+          setTotaltime(count);
+          console.log(totalTime);
+          document.getElementById("beep").play();
+      
+          
         }else{
           count--;
-          setClockCount(count);     
+          update(count);
+          setClockCount(count);
+      
         } 
       }, 1000))
     }
@@ -45,6 +78,7 @@ const App = () => {
     setPeriod(clearInterval(period));
     document.getElementById("beep").pause();
     document.getElementById("beep").currentTime = 0;
+    setTotaltime(count); 
   }
 
   const handleDecrease = (countType,timer) => {
@@ -64,7 +98,8 @@ const App = () => {
       if (!playOn && timer === timer){
         (timer === 'Break') ? setBreakCount(countType + 1) : setSessionCount(countType + 1);
         count = (countType + 1 ) * 60;
-        setClockCount(count); 
+        setClockCount(count);
+        (timer === 'Break') ? setColor("yellow") : setColor("green") ;   
       }else if(!playOn && currentTimer === !timer){
         (timer === 'Break') ? setBreakCount(countType + 1) : setSessionCount(countType + 1);
       }
@@ -105,11 +140,11 @@ const App = () => {
       </div>
       <div className= "text-center">
         <span id="timer-label">{currentTimer}</span>  
+        <br/>
+        <span id="time-left">{timeLoad(clockCount)}</span> 
       </div> 
       <button id="start_stop" onClick={handleStartStop} >
-        <div className="pie degree">
-        <span id="time-left">{timeLoad(clockCount)}</span> 
-        </div>       
+        <div style={{backgroundColor: color, backgroundImage: clockImg, borderColor: color }}  className="pie degree"/>       
       </button>  
       <button id="reset" onClick={handleReset} className="text-center">
         RESET       
