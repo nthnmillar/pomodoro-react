@@ -1,54 +1,71 @@
+//try
+// using one setstate with objects
+// alterante of setinterval with react hooks
+//ensure time is correct between transitions
+
 import React, {useState, useEffect, userRef} from 'react';
 import 'bootstrap';
 import gong from './Metal_Gong-Dianakc-109711828.wav';
+
 
 let count = 25 * 60;
 let timer = "Session";
 
 
 const App = (props) => { 
+ 
   const [breakCount, setBreakCount] = useState(5);
   const [sessionCount, setSessionCount] = useState(25);
   const [period, setPeriod] = useState(undefined); 
-  const [playOn, setPlayOn] = useState(false);
-  
+  const [playOn, setPlayOn] = useState(false); 
   const [clockCount, setClockCount] = useState(count);
- 
   const [currentTimer, setCurrentTimer] = useState(timer);
 
 
+  useEffect(() => {
+      return () => {
+        setPeriod(clearInterval(period));
+      }
+  }, [])
+
   const handleStartStop = () => {
-    if(!playOn){
+    if (playOn){
+        setPlayOn(false);
+        setPeriod(clearInterval(period));
+    }else if(!playOn){
+
       setPlayOn(true);
+
       setPeriod(setInterval(() => {
-        count--;
-        setClockCount(count);
+              
+        if(count === 0){
+          timer = (timer === "Session") ? "Break" : "Session";
+          count = (timer === "Session") ? (breakCount * 60) : (sessionCount * 60);
+          setCurrentTimer(timer);
+          setClockCount(count);       
+          document.getElementById("beep").play();
+          console.log("setInterval","timer", timer, "count", count)
         
-        /*
-        if(countCheck === 0){
-          setCurrentTimer((currentTimer === "Session") ? "Break" : "Session");
-          setClockCount((currentTimer === "Session") ? (breakCount * 60) : (sessionCount * 60));
-        }
-        */
-        
+        }else{
+          count--;
+          setClockCount(count);
+          console.log(count,"setInterval count", count);
+        } 
+       /*
         console.log(clockCount,"clock Count setInterval");
-        if (count === 0 && timer === "Session" ){
+        if (count === 1 && timer === "Session" ){
           document.getElementById("beep").play();
           timer = "Break";
           setCurrentTimer(timer);
           count = breakCount * 60;
-        } else if (count === 0 && timer === "Break"){
+        } else if (count === 1 && timer === "Break"){
           document.getElementById("beep").play();
           timer = "Session";
           setCurrentTimer(timer);
           count = sessionCount * 60;
-        } 
+        } */
       
       }, 1000))
-    }else{
-      setPlayOn(false);
-      setPeriod(clearInterval(period));
-      setPeriod(undefined);  
     }
   }
   /*
@@ -58,45 +75,91 @@ const App = (props) => {
   */
 
   const handleReset = () => {
+      
+     /*
     setBreakCount(1);
     setSessionCount(1);
     setPlayOn(false);
-    count = 1;
+    count = 3;
     setClockCount(count);
     timer = "Session";
     setCurrentTimer(timer);
     setPeriod(clearInterval(period));
+    document.getElementById("beep").pause();
+    document.getElementById("beep").currentTime = 0;
+          */ 
+   
+    setBreakCount(5);
+    setSessionCount(25);
+    setPlayOn(false);
+    count = 25 * 60;
+    setClockCount(count);
+    timer = "Session";
+    setCurrentTimer(timer);
+    setPeriod(clearInterval(period));
+    document.getElementById("beep").pause();
+    document.getElementById("beep").currentTime = 0;
+ 
   }
 
-  console.log(clockCount,"clock Count App",period, period);
+ // console.log(clockCount,"clock Count App",period, period);
 
   const handleBreakDec = () => { 
     if (breakCount > 1){
-      setBreakCount(breakCount - 1);
+      console.log(playOn,"playOn breakDec");
+      if (!playOn && currentTimer === 'Break'){
+        setBreakCount(breakCount - 1);
+        count = (breakCount - 1 ) * 60;
+        setClockCount(count);      
+      }else if(!playOn && currentTimer === 'Session'){
+        setBreakCount(breakCount - 1);
+      }
     }
   };
   
   const handleBreakInc = () => { 
     if (breakCount < 60){
-      setBreakCount(breakCount + 1);
+      console.log(playOn,"playOn breakInc");
+      if (!playOn && currentTimer === 'Break'){
+        setBreakCount(breakCount + 1);
+        count = (breakCount + 1 ) * 60;
+        setClockCount(count);       
+      } else if (!playOn && currentTimer === 'Session'){
+        setBreakCount(breakCount + 1);
+      }
     }
   };
 
   const handleSessionDec = () => { 
-    if (sessionCount > 1){
-      setSessionCount(sessionCount - 1);
-    }
+    if (sessionCount > 1 ){
+      console.log(playOn,"playOn sessionDec");
+      if (!playOn && currentTimer === 'Session'){
+        setSessionCount(sessionCount - 1);
+        count = (sessionCount - 1 ) * 60;
+        setClockCount(count);       
+      } else if(!playOn && currentTimer === 'Break'){
+        setSessionCount(sessionCount - 1);
+      } 
+    }  
   };
 
   const handleSessionInc = () => { 
-    if (sessionCount < 60){
-      setSessionCount(sessionCount + 1);
+    if (sessionCount < 60 ){
+      console.log(playOn,"playOn sessionInc");
+      if (!playOn && currentTimer === 'Session'){
+        setSessionCount(sessionCount + 1);
+        count = (sessionCount + 1 ) * 60;
+        setClockCount(count);     
+      } else if(!playOn && currentTimer === 'Break'){
+        setSessionCount(sessionCount + 1);
+      }
     }
   };
 
   const breakProps = {
     title: 'Break Length',
     count: breakCount,
+    ident: 'break',
     handleDec: handleBreakDec,
     handleInc: handleBreakInc
   }
@@ -104,11 +167,12 @@ const App = (props) => {
   const sessionProps = {
     title: 'Session Length',
     count: sessionCount,
+    ident: 'session',
     handleDec: handleSessionDec,
     handleInc: handleSessionInc
   }
 
-  const timeLoad = (inp) =>{
+  const timeLoad = (count) =>{
     /*
     let minutes = Math.floor(inp / 60);
     let seconds = inp % 60;
@@ -116,6 +180,14 @@ const App = (props) => {
     seconds = seconds< 0 ? ('0' + seconds) : seconds;
     return minutes + ":" + seconds;
     */
+   let minutes = Math.floor(count / 60);
+   let seconds = count % 60;
+     
+   minutes = minutes < 10 ? ('0'+minutes) : minutes;
+   seconds = seconds < 10 ? ('0'+seconds) : seconds;
+   
+   return `${minutes}:${seconds}`;
+   /*
     inp = inp * 1000
     let hours = Math.floor((inp % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((inp % (1000 * 60 * 60)) / (1000 * 60));
@@ -132,6 +204,7 @@ const App = (props) => {
     }else{
       return minutes + ':' + seconds; 
     } 
+    */
   }
 
   /*
@@ -176,11 +249,11 @@ const App = (props) => {
   const TimerSettings = (props) => {
     return (
         <div className = "choiceDiv text-center">
-          <h2 id ="break-label">{props.title}</h2>
+          <h2 id ={`${props.ident}-label`}>{props.title}</h2>
           <div className = "selectDiv">
-            <button  onClick={props.handleDec} id ="break-decrement">-</button>
-              <p id="break-length">{props.count}</p>
-            <button  onClick={props.handleInc} id ="break-increment">+</button>
+            <button  onClick={props.handleDec} id ={`${props.ident}-decrement`}>-</button>
+              <p id={`${props.ident}-length`}>{props.count}</p>
+            <button  onClick={props.handleInc} id ={`${props.ident}-increment`}>+</button>
           </div>    
         </div>
     )

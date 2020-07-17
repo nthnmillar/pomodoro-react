@@ -1,214 +1,242 @@
-import React from 'react';
-import { Provider, connect } from 'react-redux';
+//try
+// using one setstate with objects
+// alterante of setinterval with react hooks
+//ensure time is correct between transitions
+
+import React, {useState, useEffect, userRef} from 'react';
 import 'bootstrap';
-import store from "./store";
-import { breakLengthAction, sessionLengthAction, timerTitleAction, timerTimeAction,/* timerClockAction,*/ timerClockColAction, timerClockImgAction} from "./actions/displayActions";
-import { breakLess, pauBreakLess, breakMore, pauBreakMore, sessionLess, pauSessLess, sessionMore, pauSessMore, countStart, pauseTime, resetTimer } from "./clock";
+import gong from './Metal_Gong-Dianakc-109711828.wav';
 
-const mapStateToProps = (state => {
-  return {
-    breakLength:state.rootBreakLength.breakLength,
-    sessionLength:state.rootSessionLength.sessionLength,
-    timerTitle: state.rootTimerTitle.timerTitle,
-    timerTime: state.rootTimerTime.timerTime,
-   /* timerClock: state.rootTimerClock.timerClock, */
-    timerClockCol: state.rootTimerClockCol.timerClockCol,
-    timerClockImg: state.rootTimerClockImg.timerClockImg
+let count = 25 * 60;
+let timer = "Session";
+
+
+const App = (props) => { 
+
+  
+  const [breakCount, setBreakCount] = useState(5);
+  const [sessionCount, setSessionCount] = useState(25);
+  const [period, setPeriod] = useState(undefined); 
+  const [playOn, setPlayOn] = useState(false);
+  
+  const [clockCount, setClockCount] = useState(count);
+ 
+  const [currentTimer, setCurrentTimer] = useState(timer);
+
+
+  const handleStartStop = () => {
+    if(!playOn){
+      setPlayOn(true);
+      setPeriod(setInterval(() => {
+        
+        count--;
+        setClockCount(count);
+   
+      
+        if(count === 0){
+          setCurrentTimer((currentTimer === "Session") ? "Break" : "Session");
+          setClockCount((currentTimer === "Session") ? (breakCount * 60) : (sessionCount * 60));
+          count = ((currentTimer === "Session") ? (breakCount * 60) : (sessionCount * 60));
+        }
+    
+       document.getElementById("beep").play();
+
+       /*
+        console.log(clockCount,"clock Count setInterval");
+        if (count === 1 && timer === "Session" ){
+          document.getElementById("beep").play();
+          timer = "Break";
+          setCurrentTimer(timer);
+          count = breakCount * 60;
+        } else if (count === 1 && timer === "Break"){
+          document.getElementById("beep").play();
+          timer = "Session";
+          setCurrentTimer(timer);
+          count = sessionCount * 60;
+        } */
+      
+      }, 1000))
+    }else{
+      setPlayOn(false);
+      setPeriod(clearInterval(period));
+      setPeriod(undefined);  
+    }
+  }
+  /*
+  useEffect(() => {
+
+  },[]);
+  */
+
+  const handleReset = () => {
+    setBreakCount(1);
+    setSessionCount(1);
+    setPlayOn(false);
+    count = 3;
+    setClockCount(count);
+    timer = "Session";
+    setCurrentTimer(timer);
+    setPeriod(clearInterval(period));
+    document.getElementById("beep").pause();
+    document.getElementById("beep").currentTime = 0;
+    /*
+    setBreakCount(5);
+    setSessionCount(25);
+    setPlayOn(false);
+    count = 25 * 60;
+    setClockCount(count);
+    timer = "Session";
+    setCurrentTimer(timer);
+    setPeriod(clearInterval(period));
+    document.getElementById("beep").pause();
+    document.getElementById("beep").currentTime = 0;
+    */
+  }
+
+  console.log(clockCount,"clock Count App",period, period);
+
+  const handleBreakDec = () => { 
+    if (breakCount > 1){
+      if (!playOn && currentTimer === 'Break'){
+        setBreakCount(breakCount - 1);
+        count = (breakCount - 1 ) * 60;
+        setClockCount(count);
+      }else if(breakCount > 1){
+        setBreakCount(breakCount - 1);
+      }
+    }
   };
-})
+  
+  const handleBreakInc = () => { 
+    if (breakCount < 60){
+      if (!playOn && currentTimer === 'Break'){
+        setBreakCount(breakCount + 1);
+        count = (breakCount + 1 ) * 60;
+        setClockCount(count);
+      }else if (breakCount < 60){
+        setBreakCount(breakCount + 1);
+      }
+    }
+  };
 
-const mapDispatchToProps = dispatch => ({
-    DisplayBreakLength: () => dispatch(breakLengthAction()),
-    DisplaySessionLength: () => dispatch(sessionLengthAction()),
-    DisplayTimerTitle: () => dispatch(timerTitleAction()),
-    DisplayTimerTime: () => dispatch(timerTimeAction()),
-    /*DisplayTimerClock: () => dispatch(timerClockAction()),*/
-    DisplayTimerClockCol: () => dispatch(timerClockColAction()),
-    DisplayTimerClockImg: () => dispatch(timerClockImgAction())
-});
+  const handleSessionDec = () => { 
+    if (sessionCount > 1 ){
+      if (!playOn && currentTimer === 'Session'){
+        setSessionCount(sessionCount - 1);
+        count = (sessionCount - 1 ) * 60;
+        setClockCount(count);
+      }else if(sessionCount > 1 ){
+        setSessionCount(sessionCount - 1);
+      }
+    }  
+  };
 
-const BreakLength = (props) => {
+  const handleSessionInc = () => { 
+    if (sessionCount < 60 ){
+      if (!playOn < 60 && currentTimer === 'Session'){
+        setSessionCount(sessionCount + 1);
+        count = (sessionCount + 1 ) * 60;
+        setClockCount(count);
+      }else if(sessionCount < 60){
+        setSessionCount(sessionCount + 1);
+      }
+    }
+  };
+
+  const breakProps = {
+    title: 'Break Length',
+    count: breakCount,
+    ident: 'break',
+    handleDec: handleBreakDec,
+    handleInc: handleBreakInc
+  }
+
+  const sessionProps = {
+    title: 'Session Length',
+    count: sessionCount,
+    ident: 'session',
+    handleDec: handleSessionDec,
+    handleInc: handleSessionInc
+  }
+
+  const timeLoad = (inp) =>{
+    /*
+    let minutes = Math.floor(inp / 60);
+    let seconds = inp % 60;
+
+    seconds = seconds< 0 ? ('0' + seconds) : seconds;
+    return minutes + ":" + seconds;
+    */
+    inp = inp * 1000
+    let hours = Math.floor((inp % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((inp % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((inp % (1000 * 60)) / 1000);  
+
+    if(minutes < 10){
+      minutes = '0' + minutes;
+    }
+    if(seconds < 10){
+      seconds = '0'+ seconds;
+    }
+    if (hours > 0){  
+      return hours + ':' + minutes + ':' + seconds; 
+    }else{
+      return minutes + ':' + seconds; 
+    } 
+  }
+
+  /*
+  const handleDec = () => {
+    if(!playOn){
+      
+    }
+  }
+  
+  const handleInc = () => {
+    if(!playOn){
+      
+    }
+  }
+  */
+
   return (
-    <div className = "choiceDiv text-center">
-      <h2 id ="break-label">BREAK LENGTH</h2>
-      <div className = "selectDiv">
-        <button onClick={() => {breakLess(); pauBreakLess()}} id ="break-decrement">-</button>
-        <p /* dangerouslySetInnerHTML={{ __html:props.breakLength}} */ id="break-length">{props.breakLength}</p>
-        <button onClick={() => {breakMore(); pauBreakMore()}}  id ="break-increment">+</button>
-      </div>    
-    </div> 
-  )
-}
-
-const ConnectedBreakLength = connect(mapStateToProps, mapDispatchToProps)(BreakLength);
-//store.dispatch(breakLengthAction("10"));
-
-const SessionLength = (props) => {
-  return (
-    <div className = "choiceDiv text-center">
-      <h2 id ="session-label">SESSION LENGTH</h2>
-      <div className = "selectDiv">
-        <button onClick={() => {sessionLess(); pauSessLess()}} id ="session-decrement">-</button>
-        <p /* dangerouslySetInnerHTML={{ __html:props.sessionLength}} */ id="session-length">{props.sessionLength}</p>
-        <button onClick={() => {sessionMore(); pauSessMore()}} id ="session-increment">+</button>
-      </div>    
-    </div> 
-  )
-}
-
-const ConnectedSessionLength = connect(mapStateToProps, mapDispatchToProps)(SessionLength);
-
-const TimeLabel = (props) => {
-  return (
-    <>
-      <span /* dangerouslySetInnerHTML={{ __html:props.timerTitle}} */ id="timer-label">{props.timerTitle}</span>      
-    </>
-  )
-}
-
-const ConnectedTimeLabel = connect(mapStateToProps, mapDispatchToProps)(TimeLabel);
-
-const Time = (props) => {
-  return (
-    <>
-       <span /* dangerouslySetInnerHTML={{ __html:props.timerTime}} */ id="time-left">{props.timerTime}</span> 
-    </>
-    )
-}
-
-const ConnectedTime = connect(mapStateToProps, mapDispatchToProps)(Time);
-
-const PieButton = (props) => {
-
-  return (
-    <>
-      <button id="start_stop"  onClick = {() =>{countStart(); pauseTime()}} >
-        <div style={{backgroundColor: props.timerClockCol, backgroundImage: props.timerClockImg , borderColor: props.timerClockCol  }}  className="pie degree"/>       
-      </button>  
-    </>
-    )
-}
-
-const ConnectedPieButton = connect(mapStateToProps, mapDispatchToProps)(PieButton);
-
-
-const Reset = () => {
-  return (
-    <>
-      <button id="reset" onClick={resetTimer} className="text-center">
-        RESET       
-      </button>  
-    </>
-    )
-}
-
-const App = () =>{ 
-  return (
-    <Provider store={store}>
       <div className= "container">   
         <h1 className="text-center">Pomodoro Clock</h1>
           <div className= "text-center" id="options">
-            <ConnectedBreakLength/>
-            <ConnectedSessionLength/>
+            <TimerSettings {...breakProps}/>
+            <TimerSettings {...sessionProps}/>
+
+            <audio id="beep" preload="auto" src={gong}/>
+
           </div>
           <div className= "text-center">
-            <ConnectedTimeLabel/>
+            <span id="timer-label">{currentTimer}</span>  
             <br/>
-            <ConnectedTime/>
+            <span id="time-left">{timeLoad(clockCount)}</span> 
           </div> 
-          <ConnectedPieButton/>
-          <Reset/>
+          <button id="start_stop" onClick={handleStartStop} >
+            <div /* style={{backgroundColor: props.timerClockCol, backgroundImage: props.timerClockImg , borderColor: props.timerClockCol  }} */ className="pie degree"/>       
+          </button>  
+          <button id="reset"   onClick={handleReset} className="text-center">
+          RESET       
+        </button> 
       </div>
-    </Provider>
     )
 }
 
-export default App;
-
-
-/*
-import React from 'react';
-import 'bootstrap';
-import { Provider, connect } from 'react-redux';
-import store from "./store";
-import {displayEntryAction, displaySumAction} from './actions/displayActions';
-import {acReset, ceReset, numPress, zeroPress, decPointPress, equalPress, operatorPress} from './calculate'
-
-// mapStatetoProps
-const mapStatetoProps = (state => {
-  return {
-    entry:state.mathEntry.entry,
-    sum:state.mathSum.sum,
-  };
-});
-
-// mapDispatchToProps
-const mapDispatchToProps = dispatch => ({
-    displayEntry: () => dispatch(displayEntryAction()),
-    displaySum: () => dispatch(displaySumAction()),
-});
-
-const DisplayEntry = (props) => {
-  return (
-    <>
-      <p dangerouslySetInnerHTML={{ __html:props.entry}} id="display"></p>
-    </>
-  )
-}
-
-const DisplaySum = (props) => {
-  return (
-    <>
-      <p dangerouslySetInnerHTML={{ __html:props.sum}} id="disString"></p>
-    </>
-  )
-}
-
-const Buttons = () => {
-  return (
-    <>
-      <button onClick={acReset} id="clear">AC</button>
-      <button onClick={ceReset} id="CE">CE</button>
-      <button onClick={() => {operatorPress("&#247;")}} id="divide">&#247;</button>
-      <button onClick={() => {operatorPress("&#215;")}} id="multiply">&#215;</button>  
-      <button onClick={() => {numPress("7")}} id="seven">7</button>
-      <button onClick={() => {numPress("8")}} id="eight">8</button>
-      <button onClick={() => {numPress("9")}} id="nine">9</button>
-      <button onClick={() => {operatorPress("-")}} id="subtract">-</button>   
-      <button onClick={() => {numPress("4")}} id="four">4</button>
-      <button onClick={() => {numPress("5")}} id="five">5</button>
-      <button onClick={() => {numPress("6")}} id="six">6</button>
-      <button onClick={() => {operatorPress("+")}} id="add">+</button>    
-      <button onClick={() => {numPress("1")}} id="one">1</button>
-      <button onClick={() => {numPress("2")}} id="two">2</button>
-      <button onClick={() => {numPress("3")}} id="three">3</button>  
-      <button onClick={equalPress} id="equals">=</button>     
-      <button onClick={() => {zeroPress("0")}} id="zero">0</button>
-      <button onClick={decPointPress} id="decimal">.</button> 
-    </> 
-  )
-}
-
-const ConnectedDisplayEntry = connect(mapStatetoProps, mapDispatchToProps)(DisplayEntry);
-const ConnectedDisplaySum = connect(mapStatetoProps, mapDispatchToProps)(DisplaySum);
-
-const App = () =>{ 
-  return (
-    <Provider store={store}>
-      <div id="calcBase" className= "container">   
-        <div id="padDiv">
-          <h1 className="text-center">CALCULATOR</h1>
-          <div id="screen" className="text-right">
-            <ConnectedDisplayEntry/>
-            <ConnectedDisplaySum/>
-          </div>
-          <Buttons/>
-        </div>          
-      </div>]
-    </Provider>  
+  const TimerSettings = (props) => {
+    return (
+        <div className = "choiceDiv text-center">
+          <h2 id ={`${props.ident}-label`}>{props.title}</h2>
+          <div className = "selectDiv">
+            <button  onClick={props.handleDec} id ={`${props.ident}-decrement`}>-</button>
+              <p id={`${props.ident}-length`}>{props.count}</p>
+            <button  onClick={props.handleInc} id ={`${props.ident}-increment`}>+</button>
+          </div>    
+        </div>
     )
-}
+  }
+
+ 
 
 export default App;
-
-*/
